@@ -1,7 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 
 import com.andrei1058.bedwars.api.arena.IArena;
-import io.tofpu.bedwarsswapaddon.model.swap.pool.task.context.SwapPoolTaskContext;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.LocationSwapTask;
 import org.bukkit.entity.Player;

@@ -3,7 +3,6 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool;
 import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.SwapPoolTaskBase;
-import io.tofpu.bedwarsswapaddon.model.swap.pool.task.context.SwapPoolTaskContext;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class SwapPoolHandlerBase {
@@ -19,7 +18,7 @@ public abstract class SwapPoolHandlerBase {
 
     public abstract void init();
     public void executeTask(final IArena arena) {
-        this.task.run(new SwapPoolTaskContext(arena));
+        this.task.run(new SwapPoolTaskBase.SwapPoolTaskContext(arena));
     }
 
     public abstract SwapPoolTaskBase establishPoolTask();
