@@ -1,21 +1,17 @@
 package io.tofpu.bedwarsswapaddon;
 
 import com.andrei1058.bedwars.api.BedWars;
-import com.andrei1058.bedwars.api.arena.GameState;
-import com.andrei1058.bedwars.api.arena.team.ITeam;
+import io.tofpu.bedwarsswapaddon.model.listener.BedwarsListener;
+import io.tofpu.bedwarsswapaddon.model.swap.SwapHandlerGame;
+import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerBase;
+import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class BedwarsSwapBootstrap {
     private final JavaPlugin javaPlugin;
+    private SwapHandlerGame swapHandler;
+    private SwapPoolHandlerBase swapPoolhandler;
     private BedWars bedwarsAPI;
 
     public BedwarsSwapBootstrap(final JavaPlugin javaPlugin) {
@@ -23,9 +19,16 @@ public class BedwarsSwapBootstrap {
     }
 
     public void onEnable() {
-        bedwarsAPI = Bukkit.getServicesManager()
+
+        this.bedwarsAPI = Bukkit.getServicesManager()
                 .getRegistration(BedWars.class)
                 .getProvider();
+        this.swapPoolhandler = new SwapPoolHandlerGame(javaPlugin, bedwarsAPI);
+        this.swapHandler = new SwapHandlerGame(swapPoolhandler);
+
+        this.swapPoolhandler.init();
+
+        registerListeners();
 
 //        Bukkit.getScheduler()
 //                .runTaskTimer(javaPlugin, () -> {
@@ -95,6 +98,10 @@ public class BedwarsSwapBootstrap {
 //                                }
 //                            });
 //                }, 60, 60);
+    }
+
+    private void registerListeners() {
+        Bukkit.getPluginManager().registerEvents(new BedwarsListener(swapHandler), javaPlugin);
     }
 
     public void onDisable() {

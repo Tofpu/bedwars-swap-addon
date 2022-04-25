@@ -16,14 +16,14 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
     @Override
     public void init() {
         Bukkit.getScheduler().runTaskTimer(this.getPlugin(), () -> {
-            for (final IArena arena : getBedwarsApi().getArenaUtil().getArenas()) {
+            for (final IArena arena : getArenas()) {
                 if (arena.getStatus() != GameState.playing) {
                     continue;
                 }
 
                 executeTask(arena);
             }
-        }, 20L, 20L);
+        }, 80L, 20 * 10);
     }
 
     @Override
