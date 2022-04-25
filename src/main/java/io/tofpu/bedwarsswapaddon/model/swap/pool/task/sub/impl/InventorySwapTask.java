@@ -1,5 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import org.bukkit.Color;
@@ -23,11 +24,19 @@ public class InventorySwapTask implements SubTask {
                 .getMembers();
 
         teamOneMembers.forEach(member -> {
+            if (isUnavailable(context.getArena(), member)) {
+                return;
+            }
+
             swapArmorContentsColor(member.getInventory(),
                     playerTwoTeam.getColor().bukkitColor());
         });
 
         teamTwoMembers.forEach(member -> {
+            if (isUnavailable(context.getArena(), member)) {
+                return;
+            }
+
             swapArmorContentsColor(member.getInventory(),
                     playerOneTeam.getColor().bukkitColor());
         });
@@ -51,39 +60,9 @@ public class InventorySwapTask implements SubTask {
         }
     }
 
-//    private void swapArmorContents(final PlayerInventory playerOneInventory, final PlayerInventory playerTwoInventory) {
-//        final ItemStack[] firstPlayerArmorContents =
-//                playerOneInventory.getArmorContents();
-//        final ItemStack[] secondPlayerArmorContents = playerTwoInventory.getArmorContents();
-//
-//        for (int i = 0; i < 4; i++) {
-//            final ItemStack firstPlayerArmorContent = firstPlayerArmorContents[i];
-//            final ItemStack secondPlayerArmorContent = secondPlayerArmorContents[i];
-//
-//            final boolean isBothItemValid = isItemValid(firstPlayerArmorContent) && isItemValid(secondPlayerArmorContent);
-//
-//            if (!isBothItemValid || !firstPlayerArmorContent.getType().name()
-//                    .contains("LEATHER")) {
-//                continue;
-//            }
-//
-//            swapItemColor(firstPlayerArmorContent, secondPlayerArmorContent);
-//        }
-//    }
-//
-//    private void swapItemColor(final ItemStack firstPlayerItem, final ItemStack secondPlayerItem) {
-//        final LeatherArmorMeta firstPlayerArmorMeta = (LeatherArmorMeta) firstPlayerItem.getItemMeta();
-//        final LeatherArmorMeta secondPlayerArmorMeta = (LeatherArmorMeta) secondPlayerItem.getItemMeta();
-//
-//        final Color firstPlayerArmorColor =
-//                Color.fromBGR(firstPlayerArmorMeta.getColor().asBGR());
-//
-//        firstPlayerArmorMeta.setColor(secondPlayerArmorMeta.getColor());
-//        secondPlayerArmorMeta.setColor(firstPlayerArmorColor);
-//
-//        firstPlayerItem.setItemMeta(firstPlayerArmorMeta);
-//        secondPlayerItem.setItemMeta(secondPlayerArmorMeta);
-//    }
+    private boolean isUnavailable(final IArena arena, final Player player) {
+        return arena.isSpectator(player) || arena.isReSpawning(player);
+    }
 
     private boolean isItemValid(final ItemStack itemStack) {
         return itemStack != null && itemStack.getType() != Material.AIR;
