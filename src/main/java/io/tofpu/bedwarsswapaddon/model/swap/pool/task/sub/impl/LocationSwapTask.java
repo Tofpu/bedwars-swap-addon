@@ -37,12 +37,6 @@ public class LocationSwapTask implements SubTask {
             final Location firstMemberLocation = teamOneMember.getLocation()
                     .clone();
 
-            System.out.println(
-                    "available " + isAvailable(arena, teamOneMember) + " " + "(" +
-                    teamOneMember.getName() + ")" + " " +
-                    isAvailable(arena, teamTwoMember) + "(" +
-            teamTwoMember.getName() + ")");
-
             final boolean isTeamOneMemberAvailable = isAvailable(arena, teamOneMember);
             final boolean isTeamTwoMemberAvailable = isAvailable(arena, teamTwoMember);
 

@@ -28,6 +28,7 @@ public class BedwarsSwapBootstrap {
         this.swapHandler = new SwapHandlerGame(swapPoolhandler);
 
         ConfigurationHandler.get().load(javaPlugin);
+        LogHandler.get().init(javaPlugin);
 
         this.swapPoolhandler.init();
 

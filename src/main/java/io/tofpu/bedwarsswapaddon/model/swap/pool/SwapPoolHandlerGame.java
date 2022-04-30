@@ -21,6 +21,7 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
 
     @Override
     public void init() {
+        LogHandler.get().log("Initializing SwapPoolHandlerGame tasks...");
 
         this.poolInterval =
                 ConfigurationHandler.get().getSettingsHolder().getSwapInterval();
