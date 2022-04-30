@@ -21,7 +21,11 @@ dependencies {
 //    compileOnly("com.andrei1058.bedwars:BedWars1058:bedwars-plugin:22.3-SNAPSHOT")
     implementation("com.andrei1058.bedwars:bedwars-api:22.3.4")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
-    implementation("com.github.tofpu:dynamic-message:main-SNAPSHOT")
+    implementation("com.github.tofpu:dynamic-message:16364ab277")
+    implementation("net.kyori:adventure-api:4.10.1")
+    implementation("net.kyori:adventure-platform-bukkit:4.1.0")
+    implementation("net.kyori:adventure-text-minimessage:4.10.1")
+//    implementation("net.kyori:adventure-text-serializer-legacy:4.10.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testImplementation("com.github.mockbukkit:MockBukkit:v1.16-SNAPSHOT")

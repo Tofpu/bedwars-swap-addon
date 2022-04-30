@@ -2,10 +2,12 @@ package io.tofpu.bedwarsswapaddon.model.message;
 
 import io.tofpu.bedwarsswapaddon.plugin.BedwarsSwapAddonPlugin;
 import io.tofpu.dynamicmessage.DynamicMessage;
+import io.tofpu.dynamicmessage.holder.meta.SkipMessage;
 
 import java.io.File;
 
 public class MessageHolder extends io.tofpu.dynamicmessage.holder.MessageHolder {
+    @SkipMessage
     private static MessageHolder instance;
 
     public static void init() {
@@ -24,7 +26,7 @@ public class MessageHolder extends io.tofpu.dynamicmessage.holder.MessageHolder 
     public final String swapMessageAnnouncement =
             "<yellow>Your team swapped to " + "<gold>%team%<yellow>!";
 
-    protected MessageHolder() {
+    public MessageHolder() {
         super(new File(BedwarsSwapAddonPlugin.getPlugin(BedwarsSwapAddonPlugin.class)
                 .getDataFolder(), "messages.yml"));
     }

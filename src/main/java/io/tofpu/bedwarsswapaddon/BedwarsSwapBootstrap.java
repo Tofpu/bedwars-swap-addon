@@ -30,8 +30,9 @@ public class BedwarsSwapBootstrap {
         this.swapPoolhandler = new SwapPoolHandlerGame(javaPlugin, bedwarsAPI);
         this.swapHandler = new SwapHandlerGame(swapPoolhandler);
 
-        ConfigurationHandler.get().load(javaPlugin);
-        LogHandler.init(javaPlugin);
+        ConfigurationHandler.get().load(javaPlugin).whenComplete((configuration, throwable) -> {
+            LogHandler.init(javaPlugin);
+        });
         MessageHolder.init();
         AdventureHolder.init(javaPlugin);
 
@@ -45,6 +46,10 @@ public class BedwarsSwapBootstrap {
     }
 
     public void onDisable() {
-        AdventureHolder.get().close();
+        try {
+            AdventureHolder.get().close();
+        } catch (Exception e) {
+            // ignore
+        }
     }
 }

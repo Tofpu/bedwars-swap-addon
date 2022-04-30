@@ -10,6 +10,10 @@ import java.io.File;
 public class BedwarsSwapAddonPlugin extends JavaPlugin {
     private final BedwarsSwapBootstrap bootstrap = new BedwarsSwapBootstrap(this);
 
+    public BedwarsSwapAddonPlugin() {
+        super();
+    }
+
     protected BedwarsSwapAddonPlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
     {
         super(loader, description, dataFolder, file);
