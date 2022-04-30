@@ -38,10 +38,11 @@ tasks {
         classifier = ""
 
         dependencies {
-            relocate("org.spongepowered", "io.tofpu.speedbridge2.lib.configurate")
-//            relocate("net.kyori.adventure", "io.tofpu.speedbridge2.lib.adventure")
-            relocate("org.bstats", "io.tofpu.speedbridge2.lib.bstats")
-            relocate("org.yaml.snakeyaml", "io.tofpu.speedbridge2.lib.snakeyml")
+            relocate("org.spongepowered", "io.tofpu.bedwarsswapaddon.lib.configurate")
+            relocate("net.kyori.adventure", "io.tofpu.bedwarsswapaddon.lib.adventure")
+            relocate("org.bstats", "io.tofpu.bedwarsswapaddon.lib.bstats")
+            relocate("org.yaml.snakeyaml", "io.tofpu.bedwarsswapaddon.lib.snakeyml")
+            relocate("io.tofpu.dynamicmessage", "io.tofpu.bedwarsswapaddon.lib.dynamicmessage")
 //            relocate("revxrsal", "io.tofpu.speedbridge2.lib.lamp")
         }
 
