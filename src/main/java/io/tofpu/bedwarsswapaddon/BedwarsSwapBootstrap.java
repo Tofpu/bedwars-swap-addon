@@ -1,6 +1,7 @@
 package io.tofpu.bedwarsswapaddon;
 
 import com.andrei1058.bedwars.api.BedWars;
+import io.tofpu.bedwarsswapaddon.model.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
 import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.listener.BedwarsListener;
@@ -8,6 +9,7 @@ import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.swap.SwapHandlerGame;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerBase;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,6 +33,7 @@ public class BedwarsSwapBootstrap {
         ConfigurationHandler.get().load(javaPlugin);
         LogHandler.init(javaPlugin);
         MessageHolder.init();
+        AdventureHolder.init(javaPlugin);
 
         this.swapPoolhandler.init();
 
@@ -42,6 +45,6 @@ public class BedwarsSwapBootstrap {
     }
 
     public void onDisable() {
-
+        AdventureHolder.get().close();
     }
 }
