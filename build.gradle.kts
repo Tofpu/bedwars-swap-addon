@@ -1,6 +1,8 @@
 plugins {
     java
     id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("xyz.jpenilla.run-paper") version "1.0.6"
+
 }
 
 group = "io.tofpu"
@@ -18,17 +20,45 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 //    compileOnly("com.andrei1058.bedwars:BedWars1058:bedwars-plugin:22.3-SNAPSHOT")
     implementation("com.andrei1058.bedwars:bedwars-api:22.3.4")
+    implementation("org.spongepowered:configurate-yaml:4.1.2")
+    implementation("com.github.tofpu:dynamic-message:main-SNAPSHOT")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testImplementation("com.github.mockbukkit:MockBukkit:v1.16-SNAPSHOT")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
-tasks.processResources {
-    filesMatching("plugin.yml") {
-        expand(project.properties)
+tasks {
+    test {
+        useJUnitPlatform()
     }
-}
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+        mergeServiceFiles()
+        classifier = ""
+
+        dependencies {
+            relocate("org.spongepowered", "io.tofpu.speedbridge2.lib.configurate")
+//            relocate("net.kyori.adventure", "io.tofpu.speedbridge2.lib.adventure")
+            relocate("org.bstats", "io.tofpu.speedbridge2.lib.bstats")
+            relocate("org.yaml.snakeyaml", "io.tofpu.speedbridge2.lib.snakeyml")
+//            relocate("revxrsal", "io.tofpu.speedbridge2.lib.lamp")
+        }
+
+        exclude("META-INF/**")
+    }
+
+    processResources {
+        filesMatching("plugin.yml") {
+            expand(project.properties)
+        }
+    }
+
+    getByName<Test>("test") {
+        useJUnitPlatform()
+    }
+
+    runServer {
+        minecraftVersion("1.8.8")
+    }
 }

@@ -3,10 +3,12 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
+import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.InventorySwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.LocationSwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.TeamSwapTask;
+import io.tofpu.bedwarsswapaddon.util.TeamUtil;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -30,30 +32,42 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             }
             unaffectedPlayers.remove(player);
 
-            LogHandler.get().debug("SwapPoolTaskGame.run() player: " + player.getName());
+            LogHandler.get()
+                    .debug("SwapPoolTaskGame.run() player: " + player.getName());
 
             final ITeam playerOneTeam = arena.getTeam(player);
             final AtomicReference<ITeam> playerTwoTeam = new AtomicReference<>();
 
-            LogHandler.get().debug("SwapPoolTaskGame.run() list of unaffected players: " + unaffectedPlayers);
+            LogHandler.get()
+                    .debug("SwapPoolTaskGame.run() list of unaffected players: " +
+                           unaffectedPlayers);
 
-            final Player randomPlayer =
-                    unaffectedPlayers.stream().parallel().filter(p -> {
+            final Player randomPlayer = unaffectedPlayers.stream()
+                    .parallel()
+                    .filter(p -> {
                         playerTwoTeam.set(arena.getTeam(p));
                         return !playerOneTeam.equals(playerTwoTeam.get());
-                    }).findAny().orElse(null);
+                    })
+                    .findAny()
+                    .orElse(null);
 
             if (randomPlayer == null) {
-                LogHandler.get().debug("SwapPoolTaskGame.run() found no random player");
+                LogHandler.get()
+                        .debug("SwapPoolTaskGame.run() found no suitable team");
                 break;
             }
 
-            LogHandler.get().debug("SwapPoolTaskGame.run() found random player: " + randomPlayer.getName());
+            LogHandler.get()
+                    .debug("SwapPoolTaskGame.run() found suitable team: " +
+                           playerTwoTeam.get().getName());
             unaffectedPlayers.remove(randomPlayer);
+
+            TeamUtil.broadcastMessageTo(MessageHolder.get().swapMessageAnnouncement.replace("%team%", playerTwoTeam.get()
+                    .getName()), playerOneTeam);
+            TeamUtil.broadcastMessageTo(MessageHolder.get().swapMessageAnnouncement.replace("%team%", playerOneTeam.getName()), playerTwoTeam.get());
 
             subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, player, randomPlayer, playerOneTeam, playerTwoTeam.get())));
         }
-
     }
 
     @Override
