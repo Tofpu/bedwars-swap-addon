@@ -4,13 +4,16 @@ import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandle
 import org.bukkit.plugin.Plugin;
 
 public class LogHandler {
-    private static final LogHandler INSTANCE = new LogHandler();
+    private static LogHandler instance;
 
     private Plugin plugin;
     private boolean debug;
 
     public static LogHandler get() {
-        return INSTANCE;
+        if (instance == null) {
+            throw new IllegalStateException("LogHandler is not initialized");
+        }
+        return instance;
     }
 
     private LogHandler() {
@@ -21,14 +24,16 @@ public class LogHandler {
         init(plugin);
     }
 
-    public void init(final Plugin plugin) {
-        this.plugin = plugin;
-        this.debug = ConfigurationHandler.get()
-                .getSettingsHolder()
-                .isDebug();
+    public static synchronized void init(final Plugin plugin) {
+        instance = new LogHandler();
 
-        this.plugin.getLogger()
-                .info("Debug mode has been " + (debug ? "Enabled" : "Disabled"));
+        instance.setPlugin(plugin);
+        instance.setDebug(ConfigurationHandler.get()
+                .getSettingsHolder()
+                .isDebug());
+
+        plugin.getLogger()
+                .info("Debug mode has been " + (instance.debug ? "Enabled" : "Disabled"));
     }
 
     public void log(final String message) {
@@ -41,5 +46,13 @@ public class LogHandler {
             this.plugin.getLogger()
                     .info("[DEBUG] " + message);
         }
+    }
+
+    public void setPlugin(final Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public void setDebug(final boolean debug) {
+        this.debug = debug;
     }
 }

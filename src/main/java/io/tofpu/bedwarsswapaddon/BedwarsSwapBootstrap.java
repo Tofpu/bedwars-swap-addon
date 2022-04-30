@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.BedWars;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
 import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.listener.BedwarsListener;
+import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.swap.SwapHandlerGame;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerBase;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
@@ -28,7 +29,8 @@ public class BedwarsSwapBootstrap {
         this.swapHandler = new SwapHandlerGame(swapPoolhandler);
 
         ConfigurationHandler.get().load(javaPlugin);
-        LogHandler.get().init(javaPlugin);
+        LogHandler.init(javaPlugin);
+        MessageHolder.init();
 
         this.swapPoolhandler.init();
 
