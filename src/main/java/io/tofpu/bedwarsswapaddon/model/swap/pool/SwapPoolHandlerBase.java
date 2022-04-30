@@ -24,6 +24,7 @@ public abstract class SwapPoolHandlerBase {
     }
 
     public abstract void init();
+    public abstract void reload();
     public abstract SwapPoolTaskBase establishPoolTask();
 
     public void executeTask(final IArena arena) {

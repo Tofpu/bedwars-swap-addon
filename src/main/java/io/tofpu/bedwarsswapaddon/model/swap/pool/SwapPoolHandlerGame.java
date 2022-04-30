@@ -36,6 +36,14 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
             }
         }, 80L, poolInterval);
     }
+
+    @Override
+    public void reload() {
+        if (this.task != null) {
+            this.task.cancel();
+        }
+
+        init();
     }
 
     @Override
