@@ -17,7 +17,11 @@ public class ConfigurationHolder {
         return general.isDebug();
     }
 
-    public int getSwapInterval() {
-        return announce.getSwapInterval() * 20;
+    public int getMaximumInterval() {
+        return announce.getMaximumInterval() * 20;
+    }
+
+    public int getMinimumInterval() {
+        return announce.getMinimumInterval() * 20;
     }
 }

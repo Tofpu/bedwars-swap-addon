@@ -11,8 +11,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
-    private int poolInterval = -1;
+    private int minimumInterval, maximumInterval = -1;
     private BukkitTask task;
 
     public SwapPoolHandlerGame(final JavaPlugin plugin, final BedWars bedwarsApi) {
@@ -23,8 +25,10 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
     public void init() {
         LogHandler.get().log("Initializing SwapPoolHandlerGame tasks...");
 
-        this.poolInterval =
-                ConfigurationHandler.get().getSettingsHolder().getSwapInterval();
+        this.minimumInterval =
+                ConfigurationHandler.get().getSettingsHolder().getMinimumInterval();
+        this.maximumInterval =
+                ConfigurationHandler.get().getSettingsHolder().getMaximumInterval();
 
         this.task = Bukkit.getScheduler().runTaskTimer(this.getPlugin(), () -> {
             for (final IArena arena : getArenas()) {
@@ -34,7 +38,8 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
 
                 executeTask(arena);
             }
-        }, 80L, poolInterval);
+        }, 80L, ThreadLocalRandom.current()
+                .nextInt(this.minimumInterval, this.maximumInterval));
     }
 
     @Override
