@@ -12,7 +12,12 @@ import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 public class BedwarsSwapBootstrap {
+    public static final File ADDON_DIRECTORY = new File(
+            "plugins/Bedwars1058/Addons" + "/Swap");
+
     private final JavaPlugin javaPlugin;
     private SwapHandlerGame swapHandler;
     private SwapPoolHandlerBase swapPoolhandler;
@@ -24,6 +29,10 @@ public class BedwarsSwapBootstrap {
     }
 
     public void onEnable() {
+        if (!ADDON_DIRECTORY.exists()) {
+            ADDON_DIRECTORY.mkdirs();
+        }
+
         if (!unitTest) {
             this.bedwarsAPI = Bukkit.getServicesManager()
                     .getRegistration(BedWars.class)

@@ -6,6 +6,8 @@ import io.tofpu.dynamicmessage.holder.meta.SkipMessage;
 
 import java.io.File;
 
+import static io.tofpu.bedwarsswapaddon.BedwarsSwapBootstrap.ADDON_DIRECTORY;
+
 public class MessageHolder extends io.tofpu.dynamicmessage.holder.MessageHolder {
     @SkipMessage
     private static MessageHolder instance;
@@ -27,8 +29,7 @@ public class MessageHolder extends io.tofpu.dynamicmessage.holder.MessageHolder 
             wrap("<yellow>", "Your team swapped to ") + "%team%<yellow>!";
 
     public MessageHolder() {
-        super(new File(BedwarsSwapAddonPlugin.getPlugin(BedwarsSwapAddonPlugin.class)
-                .getDataFolder(), "messages.yml"));
+        super(new File(ADDON_DIRECTORY, "messages.yml"));
     }
 
     private String wrap(final String with, final String format) {

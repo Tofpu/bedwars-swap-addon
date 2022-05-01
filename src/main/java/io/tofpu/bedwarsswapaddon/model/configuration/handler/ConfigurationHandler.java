@@ -10,7 +10,10 @@ import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+
+import static io.tofpu.bedwarsswapaddon.BedwarsSwapBootstrap.ADDON_DIRECTORY;
 
 public class ConfigurationHandler {
     private static ConfigurationHandler INSTANCE = new ConfigurationHandler();
@@ -29,9 +32,13 @@ public class ConfigurationHandler {
     public CompletableFuture<Void> load(final Plugin plugin) {
         this.plugin = plugin;
 
-        final File file = new File(plugin.getDataFolder(), "settings.yml");
+        final File file = new File(ADDON_DIRECTORY, "settings.yml");
         if (!file.exists()) {
-            plugin.saveResource("settings.yml", false);
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new IllegalStateException("Failed to create configuration file", e);
+            }
         }
 
         this.loader = YamlConfigurationLoader.builder()

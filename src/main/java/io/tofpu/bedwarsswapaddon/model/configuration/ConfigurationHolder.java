@@ -1,23 +1,23 @@
 package io.tofpu.bedwarsswapaddon.model.configuration;
 
+import io.tofpu.bedwarsswapaddon.model.configuration.section.GeneralSection;
+import io.tofpu.bedwarsswapaddon.model.configuration.section.SwapAnnounceSection;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-import org.spongepowered.configurate.objectmapping.meta.Comment;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 @ConfigSerializable
 public class ConfigurationHolder {
-    @Setting("enable-debug-mode")
-    private boolean debug = false;
+    @Setting("general-settings")
+    private final GeneralSection general = new GeneralSection();
 
-    @Setting("swap-interval")
-    @Comment("The interval in seconds between swaps")
-    private int swapInterval = 5;
+    @Setting("swap-announce-settings")
+    private final SwapAnnounceSection announce = new SwapAnnounceSection();
 
     public boolean isDebug() {
-        return debug;
+        return general.isDebug();
     }
 
     public int getSwapInterval() {
-        return swapInterval * 20;
+        return announce.getSwapInterval() * 20;
     }
 }
