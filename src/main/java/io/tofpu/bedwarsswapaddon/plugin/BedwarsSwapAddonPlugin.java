@@ -17,6 +17,7 @@ public class BedwarsSwapAddonPlugin extends JavaPlugin {
     protected BedwarsSwapAddonPlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
     {
         super(loader, description, dataFolder, file);
+        bootstrap.setUnitTest(true);
     }
 
     @Override

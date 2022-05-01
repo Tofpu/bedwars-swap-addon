@@ -1,5 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.adventure;
 
+import io.tofpu.bedwarsswapaddon.util.ColorUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -27,8 +28,7 @@ public class AdventureHolder {
     }
 
     public void message(final Player player, final String message) {
-        message(player, MiniMessage.miniMessage()
-                .deserializeOrNull(message));
+        message(player, ColorUtil.translate(message));
     }
 
     public void message(final Player player, final Component message) {

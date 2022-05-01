@@ -19,12 +19,12 @@ public class MessageHolder extends io.tofpu.dynamicmessage.holder.MessageHolder 
         return instance;
     }
 
-    public final String swapTitleAnnounce =
-            wrap("<obf>", "00") + " " + wrap("<green>", "SWAPPAGE") + wrap("<obf>", "00") + "\n" +
-                    wrap("<gold>", "New team") + ": %team%";
+    public final String swapTitleAnnouncement =
+            wrap("<yellow>", wrap("<obf>", "00 ")) + wrap("<green>", "SWAPPAGE ") +
+            wrap("<yellow>", wrap("<obf>", "00")) + "\n" + wrap("<gold>", "New team") + ": %team%";
 
     public final String swapMessageAnnouncement =
-            "<yellow>Your team swapped to " + "<gold>%team%<yellow>!";
+            wrap("<yellow>", "Your team swapped to ") + "%team%<yellow>!";
 
     public MessageHolder() {
         super(new File(BedwarsSwapAddonPlugin.getPlugin(BedwarsSwapAddonPlugin.class)

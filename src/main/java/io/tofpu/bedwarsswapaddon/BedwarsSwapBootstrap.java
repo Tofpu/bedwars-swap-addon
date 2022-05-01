@@ -9,7 +9,6 @@ import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.swap.SwapHandlerGame;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerBase;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,25 +17,31 @@ public class BedwarsSwapBootstrap {
     private SwapHandlerGame swapHandler;
     private SwapPoolHandlerBase swapPoolhandler;
     private BedWars bedwarsAPI;
+    private boolean unitTest = false;
 
     public BedwarsSwapBootstrap(final JavaPlugin javaPlugin) {
         this.javaPlugin = javaPlugin;
     }
 
     public void onEnable() {
-        this.bedwarsAPI = Bukkit.getServicesManager()
-                .getRegistration(BedWars.class)
-                .getProvider();
+        if (!unitTest) {
+            this.bedwarsAPI = Bukkit.getServicesManager()
+                    .getRegistration(BedWars.class)
+                    .getProvider();
+        }
         this.swapPoolhandler = new SwapPoolHandlerGame(javaPlugin, bedwarsAPI);
         this.swapHandler = new SwapHandlerGame(swapPoolhandler);
 
         ConfigurationHandler.get().load(javaPlugin).whenComplete((configuration, throwable) -> {
             LogHandler.init(javaPlugin);
+            this.swapPoolhandler.init();
         });
-        MessageHolder.init();
-        AdventureHolder.init(javaPlugin);
 
-        this.swapPoolhandler.init();
+        // TODO: this is temporally until dependencies are added to DynamicMessage
+        if (!unitTest) {
+            MessageHolder.init();
+        }
+        AdventureHolder.init(javaPlugin);
 
         registerListeners();
     }
@@ -51,5 +56,9 @@ public class BedwarsSwapBootstrap {
         } catch (Exception e) {
             // ignore
         }
+    }
+
+    public void setUnitTest(final boolean unitTest) {
+        this.unitTest = unitTest;
     }
 }

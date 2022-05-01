@@ -36,7 +36,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
                     .debug("SwapPoolTaskGame.run() player: " + player.getName());
 
             final ITeam playerOneTeam = arena.getTeam(player);
-            final AtomicReference<ITeam> playerTwoTeam = new AtomicReference<>();
+            final AtomicReference<ITeam> playerTwoTeamReference = new AtomicReference<>();
 
             LogHandler.get()
                     .debug("SwapPoolTaskGame.run() list of unaffected players: " +
@@ -45,8 +45,8 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             final Player randomPlayer = unaffectedPlayers.stream()
                     .parallel()
                     .filter(p -> {
-                        playerTwoTeam.set(arena.getTeam(p));
-                        return !playerOneTeam.equals(playerTwoTeam.get());
+                        playerTwoTeamReference.set(arena.getTeam(p));
+                        return !playerOneTeam.equals(playerTwoTeamReference.get());
                     })
                     .findAny()
                     .orElse(null);
@@ -56,17 +56,23 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
                         .debug("SwapPoolTaskGame.run() found no suitable team");
                 break;
             }
+            final ITeam playerTwoTeam = playerTwoTeamReference.get();
 
             LogHandler.get()
                     .debug("SwapPoolTaskGame.run() found suitable team: " +
-                           playerTwoTeam.get().getName());
+                           playerTwoTeam.getName());
             unaffectedPlayers.remove(randomPlayer);
 
-            TeamUtil.broadcastMessageTo(MessageHolder.get().swapMessageAnnouncement.replace("%team%", playerTwoTeam.get()
-                    .getName()), playerOneTeam);
-            TeamUtil.broadcastMessageTo(MessageHolder.get().swapMessageAnnouncement.replace("%team%", playerOneTeam.getName()), playerTwoTeam.get());
+            final MessageHolder messageHolder = MessageHolder.get();
+            TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace("%team%", TeamUtil.teamOf(playerTwoTeam.getColor())), playerOneTeam);
+            TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace("%team%", TeamUtil.teamOf(playerOneTeam.getColor())), playerTwoTeam);
 
-            subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, player, randomPlayer, playerOneTeam, playerTwoTeam.get())));
+            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace("%team%",
+                    TeamUtil.teamOf(playerTwoTeam.getColor())), playerOneTeam);
+            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace("%team%",
+                    TeamUtil.teamOf(playerOneTeam.getColor())), playerTwoTeam);
+
+            subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, player, randomPlayer, playerOneTeam, playerTwoTeamReference.get())));
         }
     }
 

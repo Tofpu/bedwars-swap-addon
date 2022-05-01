@@ -25,14 +25,31 @@ dependencies {
     implementation("net.kyori:adventure-api:4.10.1")
     implementation("net.kyori:adventure-platform-bukkit:4.1.0")
     implementation("net.kyori:adventure-text-minimessage:4.10.1")
-//    implementation("net.kyori:adventure-text-serializer-legacy:4.10.1")
+
+    // for the multi-action bar support
+    implementation("com.github.cryptomorin:XSeries:8.7.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testImplementation("com.github.mockbukkit:MockBukkit:v1.16-SNAPSHOT")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
+sourceSets {
+    main {
+        java {
+//            exclude("com/cryptomorin/xseries/*")
+//            exclude("com/cryptomorin/xseries/**")
+//            include("com/cryptomorin/xseries/ReflectionUtils")
+//            include("com/cryptomorin/xseries/messages/**")
+        }
+    }
+}
+
 tasks {
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
+
     test {
         useJUnitPlatform()
     }
@@ -47,6 +64,10 @@ tasks {
             relocate("org.bstats", "io.tofpu.bedwarsswapaddon.lib.bstats")
             relocate("org.yaml.snakeyaml", "io.tofpu.bedwarsswapaddon.lib.snakeyml")
             relocate("io.tofpu.dynamicmessage", "io.tofpu.bedwarsswapaddon.lib.dynamicmessage")
+            relocate("com.cryptomorin", "io.tofpu.bedwarsswapaddon.lib" +
+                    ".xseries")
+            relocate("com.andrei1058.bedwars", "io.tofpu.bedwarsswapaddon.lib" +
+                    ".bedwars")
 //            relocate("revxrsal", "io.tofpu.speedbridge2.lib.lamp")
         }
 
