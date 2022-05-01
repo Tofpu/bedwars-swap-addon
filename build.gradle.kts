@@ -34,16 +34,16 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
-sourceSets {
-    main {
-        java {
+//sourceSets {
+//    main {
+//        java {
 //            exclude("com/cryptomorin/xseries/*")
 //            exclude("com/cryptomorin/xseries/**")
 //            include("com/cryptomorin/xseries/ReflectionUtils")
 //            include("com/cryptomorin/xseries/messages/**")
-        }
-    }
-}
+//        }
+//    }
+//}
 
 tasks {
     withType<JavaCompile> {
@@ -66,8 +66,6 @@ tasks {
             relocate("io.tofpu.dynamicmessage", "io.tofpu.bedwarsswapaddon.lib.dynamicmessage")
             relocate("com.cryptomorin", "io.tofpu.bedwarsswapaddon.lib" +
                     ".xseries")
-            relocate("com.andrei1058.bedwars", "io.tofpu.bedwarsswapaddon.lib" +
-                    ".bedwars")
 //            relocate("revxrsal", "io.tofpu.speedbridge2.lib.lamp")
         }
 
