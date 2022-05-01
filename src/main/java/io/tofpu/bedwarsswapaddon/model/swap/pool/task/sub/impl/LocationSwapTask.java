@@ -44,6 +44,7 @@ public class LocationSwapTask implements SubTask {
             if (isTeamOneMemberAvailable && isTeamTwoMemberAvailable) {
                 teamOneMember.teleport(teamTwoMember.getLocation());
                 teamTwoMember.teleport(firstMemberLocation);
+                continue;
             }
 
             // if the first member is unavailable, but the second one is,

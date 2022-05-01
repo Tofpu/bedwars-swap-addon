@@ -18,6 +18,10 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
+
+    // depending on the bedwars implementation of the bedwars api
+    compileOnly("com.andrei1058.bedwars:bedwars-plugin:22.3-SNAPSHOT")
+
 //    compileOnly("com.andrei1058.bedwars:BedWars1058:bedwars-plugin:22.3-SNAPSHOT")
     implementation("com.andrei1058.bedwars:bedwars-api:22.3.4")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
@@ -25,6 +29,7 @@ dependencies {
     implementation("net.kyori:adventure-api:4.10.1")
     implementation("net.kyori:adventure-platform-bukkit:4.1.0")
     implementation("net.kyori:adventure-text-minimessage:4.10.1")
+
 
     // for the multi-action bar support
     implementation("com.github.cryptomorin:XSeries:8.7.1")
@@ -66,6 +71,9 @@ tasks {
             relocate("io.tofpu.dynamicmessage", "io.tofpu.bedwarsswapaddon.lib.dynamicmessage")
             relocate("com.cryptomorin", "io.tofpu.bedwarsswapaddon.lib" +
                     ".xseries")
+
+            exclude("")
+
 //            relocate("revxrsal", "io.tofpu.speedbridge2.lib.lamp")
         }
 

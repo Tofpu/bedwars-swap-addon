@@ -46,7 +46,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
                     .parallel()
                     .filter(p -> {
                         playerTwoTeamReference.set(arena.getTeam(p));
-                        return !playerOneTeam.equals(playerTwoTeamReference.get());
+                        return !(playerOneTeam.equals(playerTwoTeamReference.get()) && playerOneTeam.isBedDestroyed() == playerTwoTeamReference.get().isBedDestroyed());
                     })
                     .findAny()
                     .orElse(null);
@@ -54,7 +54,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             if (randomPlayer == null) {
                 LogHandler.get()
                         .debug("SwapPoolTaskGame.run() found no suitable team");
-                break;
+                continue;
             }
             final ITeam playerTwoTeam = playerTwoTeamReference.get();
 

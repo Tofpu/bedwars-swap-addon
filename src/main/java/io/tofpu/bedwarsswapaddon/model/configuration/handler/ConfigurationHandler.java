@@ -1,10 +1,12 @@
 package io.tofpu.bedwarsswapaddon.model.configuration.handler;
 
 import io.tofpu.bedwarsswapaddon.model.configuration.ConfigurationHolder;
+import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
@@ -32,10 +34,16 @@ public class ConfigurationHandler {
             plugin.saveResource("settings.yml", false);
         }
 
-        this.loader = YamlConfigurationLoader.builder().file(file).build();
+        this.loader = YamlConfigurationLoader.builder()
+                .defaultOptions(options -> options.shouldCopyDefaults(true))
+                .nodeStyle(NodeStyle.BLOCK)
+                .file(file)
+                .build();
+
         return CompletableFuture.runAsync(() -> {
             load();
-            nodeGet();
+            establishHolder();
+            save();
         });
     }
 
@@ -55,11 +63,23 @@ public class ConfigurationHandler {
         }
     }
 
-    private void nodeGet() {
+    private void establishHolder() {
         try {
             this.holder = node.get(ConfigurationHolder.class);
         } catch (ConfigurateException e) {
             throw new IllegalStateException("Failed to deserialize configuration file", e);
+        }
+    }
+
+    private void save() {
+        if (node == null) {
+            LogHandler.get().log("Configuration node is null");
+            return;
+        }
+        try {
+            loader.save(node);
+        } catch (ConfigurateException e) {
+            throw new IllegalStateException("Failed to save configuration file", e);
         }
     }
 }
