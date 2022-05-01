@@ -16,7 +16,7 @@ import java.io.File;
 
 public class BedwarsSwapBootstrap {
     public static final File ADDON_DIRECTORY = new File(
-            "plugins/Bedwars1058/Addons" + "/Swap");
+            "plugins/BedWars1058/Addons/Swap");
 
     private final JavaPlugin javaPlugin;
     private SwapHandlerGame swapHandler;
