@@ -7,18 +7,25 @@ import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandle
 import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.SwapPoolTaskBase;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.SwapPoolTaskGame;
+import io.tofpu.bedwarsswapaddon.util.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
+public class SwapPoolHandlerGame extends SwapPoolHandlerBase<Map<IArena, Long>> {
+    private final Map<IArena, Long> arenaMap;
     private int minimumInterval, maximumInterval = -1;
     private BukkitTask task;
 
     public SwapPoolHandlerGame(final JavaPlugin plugin, final BedWars bedwarsApi) {
         super(plugin, bedwarsApi);
+        this.arenaMap = new HashMap<>();
     }
 
     @Override
@@ -27,19 +34,30 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
 
         this.minimumInterval =
                 ConfigurationHandler.get().getSettingsHolder().getMinimumInterval();
-        this.maximumInterval =
-                ConfigurationHandler.get().getSettingsHolder().getMaximumInterval();
+        this.maximumInterval = ConfigurationHandler.get()
+                .getSettingsHolder()
+                .getMaximumInterval();
 
         this.task = Bukkit.getScheduler().runTaskTimer(this.getPlugin(), () -> {
-            for (final IArena arena : getArenas()) {
-                if (arena.getStatus() != GameState.playing) {
-                    continue;
-                }
+                    for (final Map.Entry<IArena, Long> entry : getArenas().entrySet()) {
+                        final IArena arena = entry.getKey();
+                        final Long lastSwap = entry.getValue();
 
-                executeTask(arena);
-            }
-        }, 80L, ThreadLocalRandom.current()
-                .nextInt(this.minimumInterval, this.maximumInterval));
+                        if (arena.getStatus() != GameState.playing) {
+                            this.arenaMap.remove(arena);
+                            continue;
+                        }
+
+                        final long elapsedSeconds =
+                                TimeUtil.timeElapsedSeconds(lastSwap);
+                        final long randomizedInterval = ThreadLocalRandom.current().nextInt(this.minimumInterval, this.maximumInterval);
+
+                        if (elapsedSeconds >= randomizedInterval) {
+                            executeTask(arena);
+                            this.arenaMap.put(arena, System.currentTimeMillis());
+                        }
+                    }
+                }, 80L, 10L);
     }
 
     @Override
@@ -54,5 +72,23 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase {
     @Override
     public SwapPoolTaskBase establishPoolTask() {
         return new SwapPoolTaskGame();
+    }
+
+    @Override
+    public void registerArena(final IArena arena) {
+        if (this.arenaMap.putIfAbsent(arena, System.currentTimeMillis()) == null) {
+            LogHandler.get().debug("Registering arena " + arena.getArenaName());
+        }
+    }
+
+    @Override
+    public void unregisterArena(final IArena arena) {
+        LogHandler.get().debug("Unregistering arena " + arena.getArenaName());
+        this.arenaMap.remove(arena);
+    }
+
+    @Override
+    protected Map<IArena, Long> getArenas() {
+        return Collections.unmodifiableMap(this.arenaMap);
     }
 }

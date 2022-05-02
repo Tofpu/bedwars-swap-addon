@@ -18,10 +18,10 @@ public class ConfigurationHolder {
     }
 
     public int getMaximumInterval() {
-        return announce.getMaximumInterval() * 20;
+        return announce.getMaximumInterval();
     }
 
     public int getMinimumInterval() {
-        return announce.getMinimumInterval() * 20;
+        return announce.getMinimumInterval();
     }
 }

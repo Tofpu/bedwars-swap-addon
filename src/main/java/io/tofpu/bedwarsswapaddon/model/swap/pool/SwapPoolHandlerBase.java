@@ -4,23 +4,22 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.SwapPoolTaskBase;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.K;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public abstract class SwapPoolHandlerBase {
+public abstract class SwapPoolHandlerBase<C> {
     private final JavaPlugin plugin;
     private final BedWars bedwarsApi;
     private final SwapPoolTaskBase task;
-
-    private final List<IArena> arenas;
 
     public SwapPoolHandlerBase(final JavaPlugin plugin, final BedWars bedwarsApi) {
         this.plugin = plugin;
         this.bedwarsApi = bedwarsApi;
         this.task = establishPoolTask();
-        this.arenas = new ArrayList<>();
     }
 
     public abstract void init();
@@ -31,16 +30,9 @@ public abstract class SwapPoolHandlerBase {
         this.task.run(new SwapPoolTaskBase.SwapPoolTaskContext(arena));
     }
 
-    public void registerArena(final IArena arena) {
-        if (this.arenas.contains(arena)) {
-            return;
-        }
-        this.arenas.add(arena);
-    }
+    public abstract void registerArena(final IArena arena);
 
-    public void unregisterArena(final IArena arena) {
-        this.arenas.remove(arena);
-    }
+    public abstract void unregisterArena(final IArena arena);
 
     public JavaPlugin getPlugin() {
         return plugin;
@@ -50,7 +42,5 @@ public abstract class SwapPoolHandlerBase {
         return bedwarsApi;
     }
 
-    protected List<IArena> getArenas() {
-        return Collections.unmodifiableList(arenas);
-    }
+    protected abstract C getArenas();
 }
