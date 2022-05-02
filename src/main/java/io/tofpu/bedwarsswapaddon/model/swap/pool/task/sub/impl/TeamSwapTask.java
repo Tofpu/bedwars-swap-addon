@@ -4,82 +4,62 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
+import io.tofpu.bedwarsswapaddon.model.wrapper.TeamWrapper;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TeamSwapTask implements SubTask {
     @Override
     public void run(final SubTaskContext context) {
-        final ITeam playerOneTeam = context.getPlayerOneTeam();
-        final ITeam playerTwoTeam = context.getPlayerTwoTeam();
+        final TeamWrapper currentTeam = context.getCurrentTeam();
+        final TeamWrapper toTeam = context.getToTeam();
 
-        switchTeam(context, playerOneTeam, playerTwoTeam);
-        switchTeamTiers(playerOneTeam, playerTwoTeam);
-        switchScoreboard(playerOneTeam, playerTwoTeam);
+        switchTeam(currentTeam, toTeam);
+        switchTeamTiers(currentTeam, toTeam);
+        switchScoreboard(toTeam);
     }
 
-    private void switchScoreboard(final ITeam playerOneTeam, final ITeam playerTwoTeam) {
-        for (final Player player : playerOneTeam.getMembers()) {
-            final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
-                    .get(player.getUniqueId());
+    private void switchTeam(final TeamWrapper currentTeam, final TeamWrapper toTeam) {
+        final List<Player> currentTeamMembers = currentTeam.getMembers();
+        final List<Player> currentTeamLiveMembers = currentTeam.getLiveMembers();
 
-            if (scoreboard == null) {
-                continue;
-            }
-            scoreboard.handlePlayerList();
-        }
-
-        for (final Player player : playerTwoTeam.getMembers()) {
-            final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
-                    .get(player.getUniqueId());
-
-            if (scoreboard == null) {
-                continue;
-            }
-            scoreboard.handlePlayerList();
-        }
-
+        toTeam.getLiveMembers()
+                .addAll(currentTeamMembers);
+        currentTeamLiveMembers.removeAll(currentTeamMembers);
     }
 
-    private void switchTeam(final SubTaskContext context, final ITeam playerOneTeam,
-            final ITeam playerTwoTeam) {
-        final List<Player> firstPlayerTeamMembers = playerOneTeam.getMembers();
-        final List<Player> secondPlayerTeamMembers = playerTwoTeam.getMembers();
-
-        firstPlayerTeamMembers.remove(context.getPlayerOne());
-        secondPlayerTeamMembers.remove(context.getPlayerTwo());
-
-        firstPlayerTeamMembers.add(context.getPlayerTwo());
-        secondPlayerTeamMembers.add(context.getPlayerOne());
-    }
-
-    private void switchTeamTiers(final ITeam playerOneTeam, final ITeam playerTwoTeam) {
+    private void switchTeamTiers(final TeamWrapper currentTeam, final TeamWrapper toTeam) {
         // swaps the team upgrades
-        final ConcurrentHashMap<String, Integer> firstTeamUpgradeTiers = new ConcurrentHashMap<>(playerOneTeam.getTeamUpgradeTiers());
+        final ConcurrentHashMap<String, Integer> upgradeTiers = currentTeam.getTeamUpgradeTiers();
+        final Map<String, Integer> liveTeamUpgradeTiers = currentTeam.getLiveTeamUpgradeTiers();
+        liveTeamUpgradeTiers.clear();
 
-        playerOneTeam.getTeamUpgradeTiers()
-                .clear();
-        playerOneTeam.getTeamUpgradeTiers()
-                .putAll(playerTwoTeam.getTeamUpgradeTiers());
 
-        playerTwoTeam.getTeamUpgradeTiers()
-                .clear();
-        playerTwoTeam.getTeamUpgradeTiers()
-                .putAll(firstTeamUpgradeTiers);
+        toTeam.getLiveTeamUpgradeTiers()
+                .putAll(upgradeTiers);
 
         // swaps the active traps
-        final LinkedList<EnemyBaseEnterTrap> firstTeamActiveTraps = new LinkedList<>(playerOneTeam.getActiveTraps());
-        playerOneTeam.getActiveTraps()
-                .clear();
-        playerOneTeam.getActiveTraps()
-                .addAll(playerTwoTeam.getActiveTraps());
+        final LinkedList<EnemyBaseEnterTrap> activeTraps = currentTeam.getActiveTraps();
+        final List<EnemyBaseEnterTrap> liveActiveTraps = currentTeam.getLiveActiveTraps();
+        liveActiveTraps.clear();
 
-        playerTwoTeam.getActiveTraps()
-                .clear();
-        playerTwoTeam.getActiveTraps()
-                .addAll(firstTeamActiveTraps);
+        toTeam.getLiveActiveTraps()
+                .addAll(activeTraps);
+    }
+
+    private void switchScoreboard(final TeamWrapper toTeam) {
+        for (final Player player : toTeam.getLiveMembers()) {
+            final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
+                    .get(player.getUniqueId());
+
+            if (scoreboard == null) {
+                continue;
+            }
+            scoreboard.handlePlayerList();
+        }
     }
 }

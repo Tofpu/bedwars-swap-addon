@@ -2,6 +2,7 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import io.tofpu.bedwarsswapaddon.model.wrapper.TeamWrapper;
 import org.bukkit.entity.Player;
 
 public interface SubTask {
@@ -10,16 +11,13 @@ public interface SubTask {
     public static class SubTaskContext {
         private final SubTask subTask;
         private final IArena arena;
-        private final Player playerOne, playerTwo;
-        private final ITeam playerOneTeam, playerTwoTeam;
+        private final TeamWrapper currentTeam, toTeam;
 
-        public SubTaskContext(final SubTask subTask, final IArena arena, final Player playerOne, final Player playerTwo, final ITeam playerOneTeam, final ITeam playerTwoTeam) {
+        public SubTaskContext(final SubTask subTask, final IArena arena, final TeamWrapper currentTeam, final TeamWrapper to) {
             this.subTask = subTask;
             this.arena = arena;
-            this.playerOne = playerOne;
-            this.playerTwo = playerTwo;
-            this.playerOneTeam = playerOneTeam;
-            this.playerTwoTeam = playerTwoTeam;
+            this.currentTeam = currentTeam;
+            this.toTeam = to;
         }
 
         public SubTask getSubTask() {
@@ -30,20 +28,12 @@ public interface SubTask {
             return this.arena;
         }
 
-        public Player getPlayerOne() {
-            return this.playerOne;
+        public TeamWrapper getCurrentTeam() {
+            return this.currentTeam;
         }
 
-        public Player getPlayerTwo() {
-            return this.playerTwo;
-        }
-
-        public ITeam getPlayerOneTeam() {
-            return this.playerOneTeam;
-        }
-
-        public ITeam getPlayerTwoTeam() {
-            return this.playerTwoTeam;
+        public TeamWrapper getToTeam() {
+            return this.toTeam;
         }
     }
 }

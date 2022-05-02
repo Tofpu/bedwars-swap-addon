@@ -15,30 +15,19 @@ import java.util.List;
 public class InventorySwapTask implements SubTask {
     @Override
     public void run(final SubTaskContext context) {
-        final ITeam playerOneTeam = context.getPlayerOneTeam();
-        final ITeam playerTwoTeam = context.getPlayerTwoTeam();
+        final ITeam currentTeam = context.getCurrentTeam();
+        final ITeam toTeam = context.getToTeam();
 
-        final List<Player> teamOneMembers = playerOneTeam
-                .getMembers();
-        final List<Player> teamTwoMembers = playerTwoTeam
+        final List<Player> currentPlayers = currentTeam
                 .getMembers();
 
-        teamOneMembers.forEach(member -> {
+        currentPlayers.forEach(member -> {
             if (isUnavailable(context.getArena(), member)) {
                 return;
             }
 
             swapArmorContentsColor(member.getInventory(),
-                    playerTwoTeam.getColor().bukkitColor());
-        });
-
-        teamTwoMembers.forEach(member -> {
-            if (isUnavailable(context.getArena(), member)) {
-                return;
-            }
-
-            swapArmorContentsColor(member.getInventory(),
-                    playerOneTeam.getColor().bukkitColor());
+                    toTeam.getColor().bukkitColor());
         });
     }
 

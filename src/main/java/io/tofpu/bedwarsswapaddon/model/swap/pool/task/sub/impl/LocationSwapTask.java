@@ -2,7 +2,6 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -12,49 +11,31 @@ public class LocationSwapTask implements SubTask {
     public void run(final SubTaskContext context) {
         final IArena arena = context.getArena();
 
-        final List<Player> teamOneMembers = context.getPlayerOneTeam()
+        final List<Player> currentTeamMembers = context.getCurrentTeam()
                 .getMembers();
-        final List<Player> teamTwoMembers = context.getPlayerTwoTeam()
-                .getMembers();
-        for (int i = 0; i < Math.max(teamOneMembers.size(), teamTwoMembers.size()); i++) {
-            final Player teamOneMember = getSafety(teamOneMembers, i);
-            final Player teamTwoMember = getSafety(teamTwoMembers, i);
+        final List<Player> toTeamMembers = context.getToTeam()
+                .getLiveMembers();
+        for (int i = 0;
+             i < currentTeamMembers.size(); i++) {
+            final Player currentPlayer = getSafety(currentTeamMembers, i);
+            final Player toPlayer = getSafety(toTeamMembers, i);
 
-            if (teamOneMember == null && teamTwoMember != null &&
-                !isUnavailable(arena, teamTwoMember)) {
-                teamTwoMember.teleport(context.getPlayerOneTeam()
-                        .getSpawn());
+            // if current player is null, then we are done
+            if (currentPlayer == null) {
+                break;
+            }
+
+            // if the toPlayer is null, and the currentPlayer is available,
+            // then teleport the currentPlayer to the toPlayer
+            if (toPlayer == null && isAvailable(arena, currentPlayer)) {
+                currentPlayer.teleport(context.getToTeam().getSpawn());
                 continue;
             }
 
-            if (teamOneMember != null && teamTwoMember == null &&
-                !isUnavailable(arena, teamOneMember)) {
-                teamOneMember.teleport(context.getPlayerTwoTeam()
-                        .getSpawn());
-                continue;
-            }
-
-            final Location firstMemberLocation = teamOneMember.getLocation()
-                    .clone();
-
-            final boolean isTeamOneMemberAvailable = isAvailable(arena, teamOneMember);
-            final boolean isTeamTwoMemberAvailable = isAvailable(arena, teamTwoMember);
-
-            // if both players are available, swap locations
-            if (isTeamOneMemberAvailable && isTeamTwoMemberAvailable) {
-                teamOneMember.teleport(teamTwoMember.getLocation());
-                teamTwoMember.teleport(firstMemberLocation);
-                continue;
-            }
-
-            // if the first member is unavailable, but the second one is,
-            // teleport the second member to the first member's team spawn
-            if (!isTeamOneMemberAvailable) {
-                teamTwoMember.teleport(context.getPlayerOneTeam().getSpawn());
-            } else {
-                // since the second member is guaranteed to be unavailable, but the first
-                // one is, teleport the first member to the second member's team spawn
-                teamOneMember.teleport(context.getPlayerTwoTeam().getSpawn());
+            // if the toPlayer is not null, and the currentPlayer is available,
+            // then teleport the toPlayer to the currentPlayer
+            if (toPlayer != null && isAvailable(arena, currentPlayer)) {
+                currentPlayer.teleport(toPlayer.getLocation());
             }
         }
     }

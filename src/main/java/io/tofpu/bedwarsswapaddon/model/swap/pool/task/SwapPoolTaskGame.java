@@ -1,78 +1,110 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.arena.team.ITeam;
 import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.InventorySwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.LocationSwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.TeamSwapTask;
+import io.tofpu.bedwarsswapaddon.model.wrapper.TeamWrapper;
 import io.tofpu.bedwarsswapaddon.util.TeamUtil;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class SwapPoolTaskGame extends SwapPoolTaskBase {
+
+    public static final String AFTER_FORMAT_DEBUG =
+            "\nAfter result: \n" + "From: %s\n" + "  Size: %s : %s members\n" +
+            "  Members: %s : %s\n" + "To: %s\n" + "  Size: %s : %s members\n" +
+            "  Members: %s : %s";
+
     @Override
     public void run(final SwapPoolTaskContext context) {
-        LogHandler.get().debug("SwapPoolTaskGame#run has been called for " + context.getArena().getArenaName() +
-                   " arena");
+        LogHandler.get()
+                .debug("SwapPoolTaskGame#run has been called for " + context.getArena()
+                        .getArenaName() + " arena");
 
         final IArena arena = context.getArena();
-        final List<Player> players = new ArrayList<>(arena.getPlayers());
 
-        final List<Player> unaffectedPlayers = new ArrayList<>(players);
-        for (final Player player : players) {
-            if (!unaffectedPlayers.contains(player)) {
-                continue;
+        final List<TeamWrapper> filteredTeams = arena.getTeams()
+                .stream()
+                .filter(team -> team.getMembers()
+                                        .size() != 0)
+                .map(TeamWrapper::new)
+                .collect(Collectors.toList());
+
+        final List<TeamWrapper> whitelist = new ArrayList<>(filteredTeams);
+
+        LogHandler.get()
+                .debug("Filtered teams: " + whitelist.size());
+
+
+        int index = 1;
+        for (final TeamWrapper team : filteredTeams) {
+            LogHandler.get()
+                    .debug("Found team " + team.getColor() + " with " + team.getMembers()
+                            .size() + " members" + "(" + team.getMembers()
+                                   .stream()
+                                   .map(Player::getName)
+                                   .collect(Collectors.joining(", ")) + ")");
+
+            final TeamWrapper nextTeam;
+
+            if ((index) == filteredTeams.size()) {
+                nextTeam = filteredTeams.get(0);
+
+                if (nextTeam.getColor() == team.getColor()) {
+                    LogHandler.get()
+                            .debug("Nothing to swap with. Exiting.");
+                    break;
+                }
+            } else {
+                nextTeam = filteredTeams.get(index);
             }
-            unaffectedPlayers.remove(player);
 
-            LogHandler.get()
-                    .debug("SwapPoolTaskGame.run() player: " + player.getName());
-
-            final ITeam playerOneTeam = arena.getTeam(player);
-            final AtomicReference<ITeam> playerTwoTeamReference = new AtomicReference<>();
-
-            LogHandler.get()
-                    .debug("SwapPoolTaskGame.run() list of unaffected players: " +
-                           unaffectedPlayers);
-
-            final Player randomPlayer = unaffectedPlayers.stream()
-                    .parallel()
-                    .filter(p -> {
-                        playerTwoTeamReference.set(arena.getTeam(p));
-                        return !(playerOneTeam.equals(playerTwoTeamReference.get()) && playerOneTeam.isBedDestroyed() == playerTwoTeamReference.get().isBedDestroyed());
-                    })
-                    .findAny()
-                    .orElse(null);
-
-            if (randomPlayer == null) {
+            if (nextTeam == null) {
                 LogHandler.get()
-                        .debug("SwapPoolTaskGame.run() found no suitable team");
-                continue;
+                        .debug("No more teams to swap. Exiting.");
+                break;
             }
-            final ITeam playerTwoTeam = playerTwoTeamReference.get();
 
             LogHandler.get()
-                    .debug("SwapPoolTaskGame.run() found suitable team: " +
-                           playerTwoTeam.getName());
-            unaffectedPlayers.remove(randomPlayer);
+                    .debug("Found next team " + nextTeam.getColor() + " with " +
+                           nextTeam.getMembers()
+                                   .size() + " members" + "(" + nextTeam.getMembers()
+                                   .stream()
+                                   .map(Player::getName)
+                                   .collect(Collectors.joining(", ")) + ")");
+            whitelist.remove(nextTeam);
+
+            LogHandler.get()
+                    .debug("Swapping team " + team.getColor() + " with " +
+                           team.getMembers()
+                                   .size() + " members" + "(" + team.getMembers()
+                                   .stream()
+                                   .map(Player::getName)
+                                   .collect(Collectors.joining(", ")) + ")");
 
             final MessageHolder messageHolder = MessageHolder.get();
-            TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace("%team%", TeamUtil.teamOf(playerTwoTeam.getColor())), playerOneTeam);
-            TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace("%team%", TeamUtil.teamOf(playerOneTeam.getColor())), playerTwoTeam);
+            TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace("%team%", TeamUtil.teamOf(nextTeam.getColor())), team);
+            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace("%team%", TeamUtil.teamOf(nextTeam.getColor())), team);
 
-            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace("%team%",
-                    TeamUtil.teamOf(playerTwoTeam.getColor())), playerOneTeam);
-            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace("%team%",
-                    TeamUtil.teamOf(playerOneTeam.getColor())), playerTwoTeam);
+            subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, team, nextTeam)));
 
-            subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, player, randomPlayer, playerOneTeam, playerTwoTeamReference.get())));
+            LogHandler.get().debug(String.format(AFTER_FORMAT_DEBUG,
+                    team.getColor(), team.getMembers().size(), team.getLiveMembers().size(),
+                    team.getMembers().stream().map(Player::getName).collect(Collectors.joining(", ")),
+                    team.getLiveMembers().stream().map(Player::getName).collect(Collectors.joining(", ")),
+                    nextTeam.getColor(), nextTeam.getMembers().size(), nextTeam.getLiveMembers().size(),
+                    nextTeam.getMembers().stream().map(Player::getName).collect(Collectors.joining(", ")),
+                    nextTeam.getLiveMembers().stream().map(Player::getName).collect(Collectors.joining(", "))));
+
+            index++;
         }
     }
 
