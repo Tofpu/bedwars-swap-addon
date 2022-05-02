@@ -11,17 +11,26 @@ import io.tofpu.bedwarsswapaddon.model.wrapper.TeamWrapper;
 import io.tofpu.bedwarsswapaddon.util.TeamUtil;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
-    public static final String AFTER_FORMAT_DEBUG =
+    private static final String AFTER_FORMAT_DEBUG =
             "\nAfter result: \n" + "From: %s\n" + "  Size: %s : %s members\n" +
             "  Members: %s : %s\n" + "To: %s\n" + "  Size: %s : %s members\n" +
             "  Members: %s : %s";
+
+    private static final String FOUND_TEAM_DEBUG =
+            "\n" + "Iteration Item:\n " + " Team: %s\n" + "  Size: %s : %s\n" +
+            "  Members: %s : %s";
+
+    private static final String NEXT_FOUND_TEAM_DEBUG =
+            "\n" + "Next Item:\n " + " Team: %s\n" + "  Size: %s : %s\n" +
+            "  Members: %s : %s";
+
+    private static final String SWAPPING_WITH_DEBUG = "Swapping %s with %s";
 
     @Override
     public void run(final SwapPoolTaskContext context) {
@@ -38,20 +47,19 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
                 .map(TeamWrapper::new)
                 .collect(Collectors.toList());
 
-        final List<TeamWrapper> whitelist = new ArrayList<>(filteredTeams);
-
         LogHandler.get()
-                .debug("Filtered teams: " + whitelist.size());
+                .debug("Filtered teams: " + filteredTeams);
 
 
         int index = 1;
         for (final TeamWrapper team : filteredTeams) {
+
             LogHandler.get()
-                    .debug("Found team " + team.getColor() + " with " + team.getMembers()
-                            .size() + " members" + "(" + team.getMembers()
-                                   .stream()
-                                   .map(Player::getName)
-                                   .collect(Collectors.joining(", ")) + ")");
+                    .debug(String.format(FOUND_TEAM_DEBUG, team.getColor(),
+                            team.getSize(),
+                            team.getLiveMembers().size(),
+                            TeamUtil.toString(team.getLiveMembers()),
+                            TeamUtil.toString(team.getLiveMembers())));
 
             final TeamWrapper nextTeam;
 
@@ -74,21 +82,13 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             }
 
             LogHandler.get()
-                    .debug("Found next team " + nextTeam.getColor() + " with " +
-                           nextTeam.getMembers()
-                                   .size() + " members" + "(" + nextTeam.getMembers()
-                                   .stream()
-                                   .map(Player::getName)
-                                   .collect(Collectors.joining(", ")) + ")");
-            whitelist.remove(nextTeam);
+                    .debug(String.format(NEXT_FOUND_TEAM_DEBUG, team.getColor(),
+                            team.getSize(),
+                            team.getLiveMembers().size(),
+                            TeamUtil.toString(team.getLiveMembers()),
+                            TeamUtil.toString(team.getLiveMembers())));
 
-            LogHandler.get()
-                    .debug("Swapping team " + team.getColor() + " with " +
-                           team.getMembers()
-                                   .size() + " members" + "(" + team.getMembers()
-                                   .stream()
-                                   .map(Player::getName)
-                                   .collect(Collectors.joining(", ")) + ")");
+            LogHandler.get().debug(String.format(SWAPPING_WITH_DEBUG, team.getColor(), nextTeam.getColor()));
 
             final MessageHolder messageHolder = MessageHolder.get();
             TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace("%team%", TeamUtil.teamOf(nextTeam.getColor())), team);
@@ -98,11 +98,9 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
             LogHandler.get().debug(String.format(AFTER_FORMAT_DEBUG,
                     team.getColor(), team.getMembers().size(), team.getLiveMembers().size(),
-                    team.getMembers().stream().map(Player::getName).collect(Collectors.joining(", ")),
-                    team.getLiveMembers().stream().map(Player::getName).collect(Collectors.joining(", ")),
+                    TeamUtil.toString(team.getMembers()), TeamUtil.toString(team.getLiveMembers()),
                     nextTeam.getColor(), nextTeam.getMembers().size(), nextTeam.getLiveMembers().size(),
-                    nextTeam.getMembers().stream().map(Player::getName).collect(Collectors.joining(", ")),
-                    nextTeam.getLiveMembers().stream().map(Player::getName).collect(Collectors.joining(", "))));
+                    TeamUtil.toString(nextTeam.getMembers()), TeamUtil.toString(nextTeam.getLiveMembers())));
 
             index++;
         }

@@ -11,6 +11,8 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class TeamUtil {
     public static void broadcastMessageTo(final String message, final ITeam... teams) {
         for (final ITeam team : teams) {
@@ -39,5 +41,13 @@ public class TeamUtil {
                 ).applyFallbackStyle(TextDecoration.ITALIC.withState(false));
 
         return MiniMessage.miniMessage().serialize(component);
+    }
+
+    public static String toString(final List<Player> players) {
+        final StringBuilder builder = new StringBuilder();
+        for (final Player player : players) {
+            builder.append(player.getName()).append(", ");
+        }
+        return builder.substring(0, Math.max(0, builder.length() - 2));
     }
 }
