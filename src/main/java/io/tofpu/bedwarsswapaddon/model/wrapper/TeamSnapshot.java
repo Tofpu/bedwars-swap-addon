@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TeamWrapper implements ITeam {
+public class TeamSnapshot implements ITeam {
     private final ITeam originalTeam;
 
     private final TeamColor color;
@@ -45,7 +45,9 @@ public class TeamWrapper implements ITeam {
     private final List<TeamEnchant> armorsEnchantments;
     private int dragons;
 
-    public TeamWrapper(final ITeam team) {
+    private final List<PlayerSnapshot> playerSnapshots;
+
+    public TeamSnapshot(final ITeam team) {
         this.originalTeam = team;
         this.name = team.getName();
         this.color = team.getColor();
@@ -69,6 +71,11 @@ public class TeamWrapper implements ITeam {
 
         this.members = new ArrayList<>(team.getMembers());
         this.membersCache = new ArrayList<>(team.getMembersCache());
+        this.playerSnapshots = new ArrayList<>();
+
+        for (final Player player : team.getMembers()) {
+            this.playerSnapshots.add(PlayerSnapshot.of(player));
+        }
     }
 
     @Override
@@ -316,5 +323,9 @@ public class TeamWrapper implements ITeam {
 
     public ITeam getOriginalTeam() {
         return this.originalTeam;
+    }
+
+    public List<PlayerSnapshot> getPlayerSnapshots() {
+        return Collections.unmodifiableList(this.playerSnapshots);
     }
 }

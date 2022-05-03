@@ -1,10 +1,9 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
-import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
-import io.tofpu.bedwarsswapaddon.model.wrapper.TeamWrapper;
+import io.tofpu.bedwarsswapaddon.model.wrapper.TeamSnapshot;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedList;
@@ -15,15 +14,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TeamSwapTask implements SubTask {
     @Override
     public void run(final SubTaskContext context) {
-        final TeamWrapper currentTeam = context.getCurrentTeam();
-        final TeamWrapper toTeam = context.getToTeam();
+        final TeamSnapshot currentTeam = context.getCurrentTeam();
+        final TeamSnapshot toTeam = context.getToTeam();
 
         switchTeam(currentTeam, toTeam);
         switchTeamTiers(currentTeam, toTeam);
         switchScoreboard(toTeam);
     }
 
-    private void switchTeam(final TeamWrapper currentTeam, final TeamWrapper toTeam) {
+    private void switchTeam(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
         final List<Player> currentTeamMembers = currentTeam.getMembers();
         final List<Player> currentTeamLiveMembers = currentTeam.getLiveMembers();
 
@@ -32,7 +31,7 @@ public class TeamSwapTask implements SubTask {
         currentTeamLiveMembers.removeAll(currentTeamMembers);
     }
 
-    private void switchTeamTiers(final TeamWrapper currentTeam, final TeamWrapper toTeam) {
+    private void switchTeamTiers(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
         // swaps the team upgrades
         final ConcurrentHashMap<String, Integer> upgradeTiers = currentTeam.getTeamUpgradeTiers();
         final Map<String, Integer> liveTeamUpgradeTiers = currentTeam.getLiveTeamUpgradeTiers();
@@ -51,7 +50,7 @@ public class TeamSwapTask implements SubTask {
                 .addAll(activeTraps);
     }
 
-    private void switchScoreboard(final TeamWrapper toTeam) {
+    private void switchScoreboard(final TeamSnapshot toTeam) {
         for (final Player player : toTeam.getLiveMembers()) {
             final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
                     .get(player.getUniqueId());

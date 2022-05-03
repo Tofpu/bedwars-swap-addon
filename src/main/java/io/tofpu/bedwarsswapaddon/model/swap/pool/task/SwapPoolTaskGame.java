@@ -7,9 +7,8 @@ import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.InventorySwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.LocationSwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.TeamSwapTask;
-import io.tofpu.bedwarsswapaddon.model.wrapper.TeamWrapper;
+import io.tofpu.bedwarsswapaddon.model.wrapper.TeamSnapshot;
 import io.tofpu.bedwarsswapaddon.util.TeamUtil;
-import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,11 +39,11 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
         final IArena arena = context.getArena();
 
-        final List<TeamWrapper> filteredTeams = arena.getTeams()
+        final List<TeamSnapshot> filteredTeams = arena.getTeams()
                 .stream()
                 .filter(team -> team.getMembers()
                                         .size() != 0)
-                .map(TeamWrapper::new)
+                .map(TeamSnapshot::new)
                 .collect(Collectors.toList());
 
         LogHandler.get()
@@ -52,7 +51,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
 
         int index = 1;
-        for (final TeamWrapper team : filteredTeams) {
+        for (final TeamSnapshot team : filteredTeams) {
 
             LogHandler.get()
                     .debug(String.format(FOUND_TEAM_DEBUG, team.getColor(),
@@ -61,7 +60,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
                             TeamUtil.toString(team.getLiveMembers()),
                             TeamUtil.toString(team.getLiveMembers())));
 
-            final TeamWrapper nextTeam;
+            final TeamSnapshot nextTeam;
 
             if ((index) == filteredTeams.size()) {
                 nextTeam = filteredTeams.get(0);
