@@ -38,4 +38,8 @@ public class PlayerSnapshot {
     public Location getLocation() {
         return location;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
 }

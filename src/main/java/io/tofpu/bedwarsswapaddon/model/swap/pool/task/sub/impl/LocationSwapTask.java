@@ -33,6 +33,10 @@ public class LocationSwapTask implements SubTask {
             // if the toPlayer is not null, and the currentPlayer is available,
             // then teleport the toPlayer to the currentPlayer
             if (toPlayer != null && isAvailable) {
+                if (isUnavailable(arena, toPlayer.getPlayer())) {
+                    currentPlayer.teleport(context.getToTeam().getSpawn());
+                    continue;
+                }
                 currentPlayer.teleport(toPlayer.getLocation());
             }
         }

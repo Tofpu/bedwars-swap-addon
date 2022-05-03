@@ -91,7 +91,7 @@ public class TeamSnapshot implements ITeam {
 
     @Override
     public String getDisplayName(final Language language) {
-        return null;
+        return originalTeam.getDisplayName(language);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class TeamSnapshot implements ITeam {
 
     @Override
     public boolean isBedDestroyed() {
-        return this.bedDestroyed;
+        return originalTeam.isBedDestroyed();
     }
 
     @Override
