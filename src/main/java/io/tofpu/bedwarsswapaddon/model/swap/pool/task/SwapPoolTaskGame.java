@@ -1,13 +1,13 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 
 import com.andrei1058.bedwars.api.arena.IArena;
-import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
-import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
+import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
+import io.tofpu.bedwarsswapaddon.model.meta.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.InventorySwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.LocationSwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.TeamSwapTask;
-import io.tofpu.bedwarsswapaddon.model.wrapper.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
 import io.tofpu.bedwarsswapaddon.util.TeamUtil;
 
 import java.util.Arrays;

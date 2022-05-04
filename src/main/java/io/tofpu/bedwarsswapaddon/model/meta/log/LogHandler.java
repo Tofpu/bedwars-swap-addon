@@ -1,12 +1,16 @@
-package io.tofpu.bedwarsswapaddon.model.debug;
+package io.tofpu.bedwarsswapaddon.model.meta.log;
 
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
 import org.bukkit.plugin.Plugin;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LogHandler {
     private static LogHandler instance;
 
     private Plugin plugin;
+    private ExecutorService executorService;
     private boolean debug;
 
     public static LogHandler get() {
@@ -17,7 +21,8 @@ public class LogHandler {
     }
 
     private LogHandler() {
-        debug = false;
+        this.executorService = Executors.newSingleThreadExecutor();
+        this.debug = false;
     }
 
     public void reload() {
@@ -36,15 +41,16 @@ public class LogHandler {
     }
 
     public void log(final String message) {
-        this.plugin.getLogger()
-                .info(message);
+        this.executorService.submit(() -> this.plugin.getLogger()
+                .info(message));
     }
 
     public void debug(final String message) {
-        if (debug) {
-            this.plugin.getLogger()
-                    .info("[DEBUG] " + message);
+        if (!debug) {
+            return;
         }
+
+        log("[DEBUG] " + message);
     }
 
     public void setPlugin(final Plugin plugin) {
@@ -53,7 +59,6 @@ public class LogHandler {
 
     public void setDebug(final boolean debug) {
         this.debug = debug;
-        plugin.getLogger()
-                .info("Debug mode has been " + (debug ? "enabled" : "disabled") + "!");
+        log("Debug mode has been " + (debug ? "enabled" : "disabled") + "!");
     }
 }

@@ -1,4 +1,4 @@
-package io.tofpu.bedwarsswapaddon.model.message;
+package io.tofpu.bedwarsswapaddon.model.meta.message;
 
 import io.tofpu.dynamicmessage.DynamicMessage;
 import io.tofpu.dynamicmessage.holder.meta.SkipMessage;

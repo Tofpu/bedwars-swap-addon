@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
-import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
+import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.SwapPoolTaskBase;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.SwapPoolTaskGame;
 import io.tofpu.bedwarsswapaddon.util.TimeUtil;
@@ -18,6 +18,10 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SwapPoolHandlerGame extends SwapPoolHandlerBase<Map<IArena, Long>> {
+    private static final String FOUND_ARENA_DEBUG = "Found arena: %s with elapsed time:" +
+                                                    " %s seconds and target time: %s seconds";
+    private static final String RUNNING_TASK_DEBUG = "Running task: %s";
+
     private final Map<IArena, Long> arenaMap;
     private int minimumInterval, maximumInterval = -1;
     private BukkitTask task;
@@ -51,7 +55,12 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase<Map<IArena, Long>> 
                                 TimeUtil.timeElapsedSeconds(lastSwap);
                         final long randomizedInterval = ThreadLocalRandom.current().nextInt(this.minimumInterval, this.maximumInterval);
 
+                        LogHandler.get().debug(String.format(FOUND_ARENA_DEBUG,
+                                arena.getArenaName(), elapsedSeconds, randomizedInterval));
+
                         if (elapsedSeconds >= randomizedInterval) {
+                            LogHandler.get().debug(String.format(RUNNING_TASK_DEBUG, arena.getArenaName()));
+
                             executeTask(arena);
                             this.arenaMap.put(arena, System.currentTimeMillis());
                         }

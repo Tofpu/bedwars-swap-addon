@@ -1,4 +1,4 @@
-package io.tofpu.bedwarsswapaddon.model.wrapper;
+package io.tofpu.bedwarsswapaddon.wrapper;
 
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;

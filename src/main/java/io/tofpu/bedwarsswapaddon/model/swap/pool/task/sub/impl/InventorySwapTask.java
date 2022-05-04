@@ -1,9 +1,8 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
 import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.arena.team.ITeam;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
-import io.tofpu.bedwarsswapaddon.model.wrapper.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

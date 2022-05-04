@@ -1,7 +1,7 @@
 package io.tofpu.bedwarsswapaddon.model.configuration.handler;
 
 import io.tofpu.bedwarsswapaddon.model.configuration.ConfigurationHolder;
-import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
+import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;

@@ -1,7 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.swap;
 
 import com.andrei1058.bedwars.api.arena.IArena;
-import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerBase;
 
 public class SwapHandlerGame extends SwapHandlerBase {

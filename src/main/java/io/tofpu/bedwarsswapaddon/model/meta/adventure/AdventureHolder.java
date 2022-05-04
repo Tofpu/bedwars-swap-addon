@@ -1,9 +1,8 @@
-package io.tofpu.bedwarsswapaddon.model.adventure;
+package io.tofpu.bedwarsswapaddon.model.meta.adventure;
 
 import io.tofpu.bedwarsswapaddon.util.ColorUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

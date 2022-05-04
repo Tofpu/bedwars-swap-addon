@@ -2,7 +2,7 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
-import io.tofpu.bedwarsswapaddon.model.wrapper.PlayerSnapshot;
+import io.tofpu.bedwarsswapaddon.wrapper.PlayerSnapshot;
 import org.bukkit.entity.Player;
 
 import java.util.List;

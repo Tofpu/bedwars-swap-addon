@@ -1,8 +1,7 @@
 package io.tofpu.bedwarsswapaddon.model.command;
 
-import io.tofpu.bedwarsswapaddon.model.adventure.AdventureHolder;
+import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
 import revxrsal.commands.bukkit.core.BukkitActor;

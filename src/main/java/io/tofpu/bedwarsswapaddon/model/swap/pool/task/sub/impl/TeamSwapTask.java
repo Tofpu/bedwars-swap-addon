@@ -3,7 +3,7 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
-import io.tofpu.bedwarsswapaddon.model.wrapper.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package io.tofpu.bedwarsswapaddon.model.wrapper;
+package io.tofpu.bedwarsswapaddon.wrapper;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

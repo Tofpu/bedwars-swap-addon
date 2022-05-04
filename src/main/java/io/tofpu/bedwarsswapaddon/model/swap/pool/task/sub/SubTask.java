@@ -1,7 +1,7 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub;
 
 import com.andrei1058.bedwars.api.arena.IArena;
-import io.tofpu.bedwarsswapaddon.model.wrapper.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
 
 public interface SubTask {
     void run(final SubTaskContext context);

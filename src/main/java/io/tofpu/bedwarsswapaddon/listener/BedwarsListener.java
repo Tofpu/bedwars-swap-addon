@@ -1,4 +1,4 @@
-package io.tofpu.bedwarsswapaddon.model.listener;
+package io.tofpu.bedwarsswapaddon.listener;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
