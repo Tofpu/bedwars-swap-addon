@@ -29,7 +29,9 @@ dependencies {
     implementation("net.kyori:adventure-api:4.10.1")
     implementation("net.kyori:adventure-platform-bukkit:4.1.0")
     implementation("net.kyori:adventure-text-minimessage:4.10.1")
-
+    implementation("net.kyori:adventure-text-minimessage:4.10.1")
+    implementation("com.github.Revxrsal.Lamp:common:3.0.4")
+    implementation("com.github.Revxrsal.Lamp:bukkit:3.0.4")
 
     // for the multi-action bar support
     implementation("com.github.cryptomorin:XSeries:8.7.1")

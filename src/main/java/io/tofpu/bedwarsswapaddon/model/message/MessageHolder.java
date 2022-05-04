@@ -28,6 +28,15 @@ public class MessageHolder extends io.tofpu.dynamicmessage.holder.MessageHolder 
     public String swapMessageAnnouncement =
             wrap("<yellow>", "Your team swapped to ") + "%team%<yellow>!";
 
+    // commands
+    public String defaultCommand = "This is the default command. Type /swap help for " +
+                                   "more info.";
+
+    public String awaitReload = "<yellow>Reloading the plugin...";
+    public String reload = "<yellow>The plugin has been reloaded!";
+    public String reloadError = "<red>Something went wrong while reloading the " +
+                           "configuration! Check the console for more information.";
+
     public MessageHolder() {
         super(new File(ADDON_DIRECTORY, "messages.yml"));
     }

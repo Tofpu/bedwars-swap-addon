@@ -55,6 +55,8 @@ public class BedwarsSwapBootstrap {
         }
         AdventureHolder.init(javaPlugin);
 
+        CommandHandler.init(javaPlugin, reloadHandler);
+
         registerListeners();
     }
 
