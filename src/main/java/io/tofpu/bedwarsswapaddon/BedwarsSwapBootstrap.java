@@ -2,10 +2,13 @@ package io.tofpu.bedwarsswapaddon;
 
 import com.andrei1058.bedwars.api.BedWars;
 import io.tofpu.bedwarsswapaddon.model.adventure.AdventureHolder;
+import io.tofpu.bedwarsswapaddon.model.command.CommandHandler;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
 import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.listener.BedwarsListener;
 import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
+import io.tofpu.bedwarsswapaddon.model.reload.MainReloadHandler;
+import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
 import io.tofpu.bedwarsswapaddon.model.swap.SwapHandlerGame;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerBase;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
@@ -34,7 +37,10 @@ public class BedwarsSwapBootstrap {
             ADDON_DIRECTORY.mkdirs();
         }
 
+        LogHandler.init(javaPlugin);
+
         if (!unitTest) {
+            LogHandler.get().log("Hooking into the Bedwars API...");
             this.bedwarsAPI = Bukkit.getServicesManager()
                     .getRegistration(BedWars.class)
                     .getProvider();
@@ -44,32 +50,45 @@ public class BedwarsSwapBootstrap {
         this.swapHandler = new SwapHandlerGame(swapPoolhandler);
         this.reloadHandler = new MainReloadHandler(swapPoolhandler);
 
+        LogHandler.get().log("Loading the configuration...");
         ConfigurationHandler.get().load(javaPlugin).whenComplete((configuration, throwable) -> {
-            LogHandler.init(javaPlugin);
+            if (throwable != null) {
+                LogHandler.get().log("Failed to load the configuration: " + throwable.getMessage());
+            } else {
+                LogHandler.get().log("The configuration has been loaded.");
+            }
+            LogHandler.get().load();
             this.swapPoolhandler.init();
         });
 
         // TODO: this is temporally until dependencies are added to DynamicMessage
         if (!unitTest) {
+            LogHandler.get().log("Initializing the messages...");
             MessageHolder.init();
         }
+
+        LogHandler.get().log("Hooking into adventure...");
         AdventureHolder.init(javaPlugin);
 
+        LogHandler.get().log("Initializing the commands...");
         CommandHandler.init(javaPlugin, reloadHandler);
 
         registerListeners();
     }
 
     private void registerListeners() {
+        LogHandler.get().log("Initializing the listeners...");
         Bukkit.getPluginManager().registerEvents(new BedwarsListener(swapHandler), javaPlugin);
     }
 
     public void onDisable() {
+        LogHandler.get().log("Unhooking from adventure...");
         try {
             AdventureHolder.get().close();
         } catch (Exception e) {
             // ignore
         }
+        LogHandler.get().log("Goodbye!");
     }
 
     public void setUnitTest(final boolean unitTest) {

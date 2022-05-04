@@ -26,14 +26,13 @@ public class LogHandler {
 
     public static synchronized void init(final Plugin plugin) {
         instance = new LogHandler();
-
         instance.setPlugin(plugin);
+    }
+
+    public void load() {
         instance.setDebug(ConfigurationHandler.get()
                 .getSettingsHolder()
                 .isDebug());
-
-        plugin.getLogger()
-                .info("Debug mode has been " + (instance.debug ? "Enabled" : "Disabled"));
     }
 
     public void log(final String message) {
@@ -54,5 +53,7 @@ public class LogHandler {
 
     public void setDebug(final boolean debug) {
         this.debug = debug;
+        plugin.getLogger()
+                .info("Debug mode has been " + (debug ? "enabled" : "disabled") + "!");
     }
 }
