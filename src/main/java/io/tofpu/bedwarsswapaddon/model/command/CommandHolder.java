@@ -1,5 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.command;
 
+import io.tofpu.bedwarsswapaddon.model.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.command.presenter.HelpPresenterHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
 import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
@@ -34,13 +35,15 @@ public class CommandHolder {
                         if (error.getMessage() != null) {
                             player.sendMessage(error.getMessage());
                         }
-                        player.sendMessage(MessageHolder.get().reloadError);
+                        AdventureHolder.get()
+                                .message(player, MessageHolder.get().reloadError);
 
                         error.printStackTrace();
                         return;
                     }
 
-                    player.sendMessage(MessageHolder.get().reload);
+                    AdventureHolder.get()
+                            .message(player, MessageHolder.get().reload);
                 });
         return MessageHolder.get().awaitReload;
     }
@@ -48,6 +51,7 @@ public class CommandHolder {
     @Subcommand("help")
     @Description("This help message")
     public String help() {
-        return HelpPresenterHolder.get().result();
+        return HelpPresenterHolder.get()
+                .result();
     }
 }
