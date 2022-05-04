@@ -52,6 +52,8 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
                 .debug("Filtered teams: " + filteredTeams.stream().map(TeamSnapshot::getName)
                                 .collect(Collectors.joining(", ")));
 
+        // Rules:
+        // 1. Use the live data for write, and use the copy for read.
 
         final Map<TeamSnapshot, TeamSnapshot> swapMap = new HashMap<>();
 

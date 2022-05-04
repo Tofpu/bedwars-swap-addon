@@ -20,7 +20,8 @@ public class BedwarsSwapBootstrap {
 
     private final JavaPlugin javaPlugin;
     private SwapHandlerGame swapHandler;
-    private SwapPoolHandlerBase swapPoolhandler;
+    private SwapPoolHandlerBase<?> swapPoolhandler;
+    private ReloadHandlerBase reloadHandler;
     private BedWars bedwarsAPI;
     private boolean unitTest = false;
 
@@ -38,8 +39,10 @@ public class BedwarsSwapBootstrap {
                     .getRegistration(BedWars.class)
                     .getProvider();
         }
+
         this.swapPoolhandler = new SwapPoolHandlerGame(javaPlugin, bedwarsAPI);
         this.swapHandler = new SwapHandlerGame(swapPoolhandler);
+        this.reloadHandler = new MainReloadHandler(swapPoolhandler);
 
         ConfigurationHandler.get().load(javaPlugin).whenComplete((configuration, throwable) -> {
             LogHandler.init(javaPlugin);
