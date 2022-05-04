@@ -42,7 +42,7 @@ public class HelpPresenterHolder {
 
     private void generate(final PluginDescriptionFile description) {
         final MessagePresenterHolder holder = new MessagePresenterHolderImpl("<yellow" +
-                                                                             "><bold>Swap Addon Help!");
+                                                                             "><bold>Swap Addon!");
         holder.with(() -> {
             final MessagePairPresenter.Builder builder = new MessagePairPresenter.Builder();
 
@@ -64,7 +64,8 @@ public class HelpPresenterHolder {
                 }
                 final String usage = generateUsageOfMethod(commandMethod, method);
 
-                builder.message(String.format(COMMAND_STYLE, commandMethod.value()[0], usage, commandDescription.value()));
+                builder.message(String.format(COMMAND_STYLE, commandMethod.value()[0],
+                        usage, commandDescription != null ? commandDescription.value() : ""));
             }
             return builder.build();
         }).with(() -> {

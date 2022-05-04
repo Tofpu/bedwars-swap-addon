@@ -7,6 +7,7 @@ import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
 import org.bukkit.entity.Player;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.Description;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
 
@@ -25,6 +26,7 @@ public class CommandHolder {
     }
 
     @Subcommand("reload")
+    @Description("Reloads the configuration")
     public String reload(final Player player) {
         reloadHandler.reload()
                 .whenComplete((result, error) -> {
@@ -44,6 +46,7 @@ public class CommandHolder {
     }
 
     @Subcommand("help")
+    @Description("This help message")
     public String help() {
         return HelpPresenterHolder.get().result();
     }

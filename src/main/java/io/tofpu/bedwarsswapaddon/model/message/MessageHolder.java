@@ -1,6 +1,5 @@
 package io.tofpu.bedwarsswapaddon.model.message;
 
-import io.tofpu.bedwarsswapaddon.plugin.BedwarsSwapAddonPlugin;
 import io.tofpu.dynamicmessage.DynamicMessage;
 import io.tofpu.dynamicmessage.holder.meta.SkipMessage;
 
@@ -29,16 +28,23 @@ public class MessageHolder extends io.tofpu.dynamicmessage.holder.MessageHolder 
             wrap("<yellow>", "Your team swapped to ") + "%team%<yellow>!";
 
     // commands
-    public String defaultCommand = "This is the default command. Type /swap help for " +
-                                   "more info.";
+    public String defaultCommand =
+            "<yellow>This is the default command. Type " + command("/swap help") +
+            " for more info!";
 
     public String awaitReload = "<yellow>Reloading the plugin...";
     public String reload = "<yellow>The plugin has been reloaded!";
     public String reloadError = "<red>Something went wrong while reloading the " +
-                           "configuration! Check the console for more information.";
+                                "configuration! Check the console for more information.";
 
     public MessageHolder() {
         super(new File(ADDON_DIRECTORY, "messages.yml"));
+    }
+
+    private String command(final String command) {
+        return "<hover:show_text:'<yellow>Click to run " +
+               "%command%'><click:run_command:'%command%'><gold>%command%".replace(
+                       "%command" + "%", command);
     }
 
     private String wrap(final String with, final String format) {
