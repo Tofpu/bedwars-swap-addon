@@ -1,5 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.listener;
 
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
@@ -17,11 +18,24 @@ public class BedwarsListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerJoinArena(final TeamAssignEvent event) {
-        this.swapHandler.registerArena(event.getArena());
+        final IArena arena = event.getArena();
+
+        if (!isSwappageArena(arena)) {
+            return;
+        }
+        this.swapHandler.registerArena(arena);
     }
 
     @EventHandler
     private void onPlayerLeaveArena(final GameEndEvent event) {
-        this.swapHandler.unregisterArena(event.getArena());
+        final IArena arena = event.getArena();
+        if (!isSwappageArena(arena)) {
+            return;
+        }
+        this.swapHandler.unregisterArena(arena);
+    }
+
+    private boolean isSwappageArena(final IArena arena) {
+        return arena.getGroup().equals("swappage") || arena.getGroup().equals("swap");
     }
 }
