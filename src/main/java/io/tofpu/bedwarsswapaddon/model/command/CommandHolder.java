@@ -1,5 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.command;
 
+import io.tofpu.bedwarsswapaddon.model.command.presenter.HelpPresenterHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
 import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
@@ -44,6 +45,6 @@ public class CommandHolder {
 
     @Subcommand("help")
     public String help() {
-        return "This is the help command.";
+        return HelpPresenterHolder.get().result();
     }
 }

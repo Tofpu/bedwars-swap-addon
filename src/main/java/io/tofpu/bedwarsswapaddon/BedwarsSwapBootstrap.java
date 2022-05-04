@@ -3,6 +3,7 @@ package io.tofpu.bedwarsswapaddon;
 import com.andrei1058.bedwars.api.BedWars;
 import io.tofpu.bedwarsswapaddon.model.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.command.CommandHandler;
+import io.tofpu.bedwarsswapaddon.model.command.presenter.HelpPresenterHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
 import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.listener.BedwarsListener;
@@ -72,6 +73,9 @@ public class BedwarsSwapBootstrap {
 
         LogHandler.get().log("Initializing the commands...");
         CommandHandler.init(javaPlugin, reloadHandler);
+
+        LogHandler.get().log("Generating the help message...");
+        HelpPresenterHolder.generatePresenter(javaPlugin.getDescription());
 
         registerListeners();
     }

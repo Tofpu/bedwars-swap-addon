@@ -1,8 +1,11 @@
 package io.tofpu.bedwarsswapaddon.model.command;
 
+import io.tofpu.bedwarsswapaddon.model.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
+import revxrsal.commands.bukkit.core.BukkitActor;
 
 public class CommandHandler extends CommandHandlerBase {
     private BukkitCommandHandler bukkitHandler;
@@ -15,12 +18,15 @@ public class CommandHandler extends CommandHandlerBase {
     public void create(final Plugin plugin, final ReloadHandlerBase reloadHandler) {
         this.bukkitHandler = BukkitCommandHandler.create(plugin);
 
-        this.bukkitHandler.registerResponseHandler(String.class,
-                (response, actor, command) -> {
+        this.bukkitHandler.registerResponseHandler(String.class, (response, actor, command) -> {
             if (response.isEmpty()) {
                 return;
             }
-            actor.reply(response);
+
+            final BukkitActor bukkitActor = (BukkitActor) actor;
+
+            AdventureHolder.get()
+                    .message(bukkitActor.getSender(), response);
         });
 
         this.bukkitHandler.register(new CommandHolder(reloadHandler));

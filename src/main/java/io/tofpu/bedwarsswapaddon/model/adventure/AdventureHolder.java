@@ -4,6 +4,7 @@ import io.tofpu.bedwarsswapaddon.util.ColorUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -27,12 +28,16 @@ public class AdventureHolder {
         this.adventure = adventure;
     }
 
+    public void message(final CommandSender player, final String message) {
+        message(player, ColorUtil.translate(message));
+    }
+
     public void message(final Player player, final String message) {
         message(player, ColorUtil.translate(message));
     }
 
-    public void message(final Player player, final Component message) {
-        this.adventure.player(player).sendMessage(message);
+    public void message(final CommandSender sender, final Component message) {
+        this.adventure.sender(sender).sendMessage(message);
     }
 
     public void close() {
