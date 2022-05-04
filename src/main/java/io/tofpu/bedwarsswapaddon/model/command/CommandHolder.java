@@ -2,7 +2,9 @@ package io.tofpu.bedwarsswapaddon.model.command;
 
 import io.tofpu.bedwarsswapaddon.model.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.command.presenter.HelpPresenterHolder;
+import io.tofpu.bedwarsswapaddon.model.configuration.ConfigurationHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
+import io.tofpu.bedwarsswapaddon.model.debug.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
 import org.bukkit.entity.Player;
@@ -15,6 +17,12 @@ import revxrsal.commands.bukkit.annotation.CommandPermission;
 @Command("swap")
 @CommandPermission("swap.admin")
 public class CommandHolder {
+    private static final String RELOAD_DEBUG =
+            "Reload Debug:\n" + "Previous:\n" + "  - debug-mode: %s\n" +
+            "  - minimum-swap-interval: %s\n" + "  - maximum-swap-interval: %s\n" +
+            "After:\n" + "  - debug-mode: %s\n" + "  - minimum-swap-interval: %s\n" +
+            "  - maximum-swap-interval: %s";
+
     private final ReloadHandlerBase reloadHandler;
 
     public CommandHolder(final ReloadHandlerBase reloadHandler) {
@@ -29,6 +37,10 @@ public class CommandHolder {
     @Subcommand("reload")
     @Description("Reloads the configuration")
     public String reload(final Player player) {
+        final ConfigurationHolder copyOfSettings = ConfigurationHandler.get()
+                .getSettingsHolder()
+                .copy();
+
         reloadHandler.reload()
                 .whenComplete((result, error) -> {
                     if (error != null) {
@@ -40,6 +52,24 @@ public class CommandHolder {
 
                         error.printStackTrace();
                         return;
+                    }
+
+                    final ConfigurationHolder settings = ConfigurationHandler.get()
+                            .getSettingsHolder();
+
+                    if (settings.equals(copyOfSettings)) {
+                        LogHandler.get()
+                                .debug("No changes were detected when the reloading " +
+                                       "process was performed.");
+                    } else {
+                        LogHandler.get()
+                                .debug(String.format(RELOAD_DEBUG,
+                                        copyOfSettings.isDebug(),
+                                        copyOfSettings.getMinimumInterval(),
+                                        copyOfSettings.getMaximumInterval(),
+                                        settings.isDebug(),
+                                        settings.getMinimumInterval(),
+                                        settings.getMaximumInterval()));
                     }
 
                     AdventureHolder.get()

@@ -11,4 +11,23 @@ public class GeneralSection {
     public boolean isDebug() {
         return debug;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final GeneralSection that = (GeneralSection) o;
+
+        return isDebug() == that.isDebug();
+    }
+
+    @Override
+    public int hashCode() {
+        return (isDebug() ? 1 : 0);
+    }
 }

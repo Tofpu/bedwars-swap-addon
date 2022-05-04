@@ -21,4 +21,28 @@ public class SwapAnnounceSection {
     public int getMinimumInterval() {
         return minSwapInterval;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final SwapAnnounceSection that = (SwapAnnounceSection) o;
+
+        if (minSwapInterval != that.minSwapInterval) {
+            return false;
+        }
+        return maxSwapInterval == that.maxSwapInterval;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = minSwapInterval;
+        result = 31 * result + maxSwapInterval;
+        return result;
+    }
 }
