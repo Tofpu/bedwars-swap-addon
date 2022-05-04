@@ -74,6 +74,8 @@ tasks {
             relocate("org.bstats", "io.tofpu.bedwarsswapaddon.lib.bstats")
             relocate("org.yaml.snakeyaml", "io.tofpu.bedwarsswapaddon.lib.snakeyml")
             relocate("io.tofpu.dynamicmessage", "io.tofpu.bedwarsswapaddon.lib.dynamicmessage")
+            relocate("io.tofpu.messagepresenter", "io.tofpu.bedwarsswapaddon.lib" +
+                    ".messagepresenter")
             relocate("com.cryptomorin", "io.tofpu.bedwarsswapaddon.lib" +
                     ".xseries")
 
