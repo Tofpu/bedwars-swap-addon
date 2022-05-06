@@ -2,8 +2,10 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
+import io.tofpu.bedwarsswapaddon.util.VectorUtil;
 import io.tofpu.bedwarsswapaddon.wrapper.PlayerSnapshot;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class LocationSwapTask implements SubTask {
             // then teleport the currentPlayer to the toPlayer
             if (toPlayer == null && isAvailable) {
                 currentPlayer.teleport(context.getToTeam().getSpawn());
+                currentPlayer.setVelocity(VectorUtil.EMPTY_VELOCITY);
                 continue;
             }
 
@@ -35,9 +38,11 @@ public class LocationSwapTask implements SubTask {
             if (toPlayer != null && isAvailable) {
                 if (isUnavailable(arena, toPlayer.getPlayer())) {
                     currentPlayer.teleport(context.getToTeam().getSpawn());
+                    currentPlayer.setVelocity(VectorUtil.EMPTY_VELOCITY);
                     continue;
                 }
                 currentPlayer.teleport(toPlayer.getLocation());
+                currentPlayer.setVelocity(toPlayer.getVelocity());
             }
         }
     }
