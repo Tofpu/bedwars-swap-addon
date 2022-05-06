@@ -8,7 +8,7 @@ public class ImmutableLinkedList<T> extends LinkedList<T> {
         return new ImmutableLinkedList<>(list);
     }
 
-    private ImmutableLinkedList(final LinkedList<T> list) {
+    public ImmutableLinkedList(final LinkedList<T> list) {
         super.addAll(size(), list);
     }
 

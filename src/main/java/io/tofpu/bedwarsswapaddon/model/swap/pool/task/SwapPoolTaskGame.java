@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SwapPoolTaskGame extends SwapPoolTaskBase {
-
     private static final String AFTER_FORMAT_DEBUG =
             "\nAfter result: \n" + "From: %s\n" + "  Size: %s : %s members\n" +
             "  Members: %s : %s\n" + "To: %s\n" + "  Size: %s : %s members\n" +

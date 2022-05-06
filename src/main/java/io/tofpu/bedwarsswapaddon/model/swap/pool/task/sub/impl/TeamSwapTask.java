@@ -1,15 +1,14 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
-import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.upgrades.UpgradesManager;
+import com.andrei1058.bedwars.upgrades.menu.MenuUpgrade;
+import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
 import org.bukkit.entity.Player;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TeamSwapTask implements SubTask {
     @Override
@@ -24,30 +23,51 @@ public class TeamSwapTask implements SubTask {
 
     private void switchTeam(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
         final List<Player> currentTeamMembers = currentTeam.getMembers();
-        final List<Player> currentTeamLiveMembers = currentTeam.getLiveMembers();
 
         toTeam.getLiveMembers()
                 .addAll(currentTeamMembers);
-        currentTeamLiveMembers.removeAll(currentTeamMembers);
+        currentTeam.getLiveMembers()
+                .removeAll(currentTeamMembers);
     }
 
+    // TODO: tiers is not being shown in the upgrades menu; need to fix this
     private void switchTeamTiers(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
         // swaps the team upgrades
-        final ConcurrentHashMap<String, Integer> upgradeTiers = currentTeam.getTeamUpgradeTiers();
-        final Map<String, Integer> liveTeamUpgradeTiers = currentTeam.getLiveTeamUpgradeTiers();
-        liveTeamUpgradeTiers.clear();
 
-
+        // resetting the next team data
         toTeam.getLiveTeamUpgradeTiers()
-                .putAll(upgradeTiers);
-
-        // swaps the active traps
-        final LinkedList<EnemyBaseEnterTrap> activeTraps = currentTeam.getActiveTraps();
-        final List<EnemyBaseEnterTrap> liveActiveTraps = currentTeam.getLiveActiveTraps();
-        liveActiveTraps.clear();
-
+                .keySet().removeAll(toTeam.getTeamUpgradeTiers().keySet());
+        toTeam.getLiveSwordsEnchantments()
+                .removeAll(toTeam.getSwordsEnchantments());
+        toTeam.getLiveArmorsEnchantments()
+                .removeAll(toTeam.getArmorsEnchantments());
+        toTeam.getLiveBowsEnchantments()
+                .removeAll(toTeam.getBowsEnchantments());
         toTeam.getLiveActiveTraps()
-                .addAll(activeTraps);
+                .removeAll(toTeam.getActiveTraps());
+        toTeam.getLiveBaseEffects()
+                .removeAll(toTeam.getBaseEffects());
+        toTeam.getTeamEffects()
+                .removeAll(toTeam.getTeamEffects());
+
+        // adding the current team data to the next team
+        toTeam.getLiveTeamUpgradeTiers()
+                .putAll(currentTeam.getTeamUpgradeTiers());
+        toTeam.getLiveSwordsEnchantments()
+                .addAll(currentTeam.getSwordsEnchantments());
+        toTeam.getLiveArmorsEnchantments()
+                .addAll(currentTeam.getArmorsEnchantments());
+        toTeam.getLiveBowsEnchantments()
+                .addAll(currentTeam.getBowsEnchantments());
+        toTeam.getLiveActiveTraps()
+                .addAll(currentTeam.getActiveTraps());
+        toTeam.getLiveBaseEffects()
+                .addAll(currentTeam.getBaseEffects());
+        toTeam.getTeamEffects()
+                .addAll(currentTeam.getTeamEffects());
+
+        LogHandler.get()
+                .debug("Before: " + toTeam.getTeamUpgradeTiers() + " After: " + toTeam.getLiveTeamUpgradeTiers());
     }
 
     private void switchScoreboard(final TeamSnapshot toTeam) {

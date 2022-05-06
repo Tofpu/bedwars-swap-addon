@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TeamSnapshot implements ITeam {
-    private final ITeam originalTeam;
+    private final BedWarsTeam originalTeam;
 
     private final TeamColor color;
     private final Location spawn;
@@ -39,6 +41,7 @@ public class TeamSnapshot implements ITeam {
     private Vector killDropsLoc = null;
     private final List<IGenerator> generators;
     private final ConcurrentHashMap<String, Integer> teamUpgradeList;
+    private List<PotionEffect> teamEffects;
     private final List<PotionEffect> base;
     private final List<TeamEnchant> bowsEnchantments;
     private final List<TeamEnchant> swordsEnchantments;
@@ -48,6 +51,10 @@ public class TeamSnapshot implements ITeam {
     private final List<PlayerSnapshot> playerSnapshots;
 
     public TeamSnapshot(final ITeam team) {
+        this((BedWarsTeam) team);
+    }
+
+    public TeamSnapshot(final BedWarsTeam team) {
         this.originalTeam = team;
         this.name = team.getName();
         this.color = team.getColor();
@@ -62,6 +69,7 @@ public class TeamSnapshot implements ITeam {
         this.arena = (Arena) team.getArena();
         this.generators = new ArrayList<>(team.getGenerators());
         this.teamUpgradeList = new ConcurrentHashMap<>(team.getTeamUpgradeTiers());
+        this.teamEffects = new ArrayList<>(team.getTeamEffects());
         this.base = new ArrayList<>(team.getBaseEffects());
         this.bowsEnchantments = new ArrayList<>(team.getBowsEnchantments());
         this.swordsEnchantments = new ArrayList<>(team.getSwordsEnchantments());
@@ -121,22 +129,22 @@ public class TeamSnapshot implements ITeam {
 
     @Override
     public ConcurrentHashMap<String, Integer> getTeamUpgradeTiers() {
-        return this.teamUpgradeList;
+        return new ImmutableConcurrectMap<>(this.teamUpgradeList);
     }
 
     @Override
     public List<TeamEnchant> getBowsEnchantments() {
-        return this.bowsEnchantments;
+        return Collections.unmodifiableList(this.bowsEnchantments);
     }
 
     @Override
     public List<TeamEnchant> getSwordsEnchantments() {
-        return this.swordsEnchantments;
+        return Collections.unmodifiableList(this.swordsEnchantments);
     }
 
     @Override
     public List<TeamEnchant> getArmorsEnchantments() {
-        return this.armorsEnchantments;
+        return Collections.unmodifiableList(this.armorsEnchantments);
     }
 
     @Override
@@ -321,11 +329,35 @@ public class TeamSnapshot implements ITeam {
         return this.originalTeam.getActiveTraps();
     }
 
-    public ITeam getOriginalTeam() {
-        return this.originalTeam;
+    public List<TeamEnchant> getLiveArmorsEnchantments() {
+        return this.originalTeam.getArmorsEnchantments();
+    }
+
+    public List<TeamEnchant> getLiveBowsEnchantments() {
+        return this.originalTeam.getBowsEnchantments();
+    }
+
+    public List<TeamEnchant> getLiveSwordsEnchantments() {
+        return this.originalTeam.getSwordsEnchantments();
     }
 
     public List<PlayerSnapshot> getPlayerSnapshots() {
         return Collections.unmodifiableList(this.playerSnapshots);
+    }
+
+    public List<PotionEffect> getLiveBaseEffects() {
+        return this.originalTeam.getBaseEffects();
+    }
+
+    public List<PotionEffect> getTeamEffects() {
+        return this.teamEffects;
+    }
+
+    public List<PotionEffect> getLiveTeamEffects() {
+        return this.originalTeam.getTeamEffects();
+    }
+
+    public ITeam getOriginalTeam() {
+        return this.originalTeam;
     }
 }
