@@ -67,7 +67,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             for (int j = i + 1; j < filteredTeams.size(); j++) {
                 final TeamSnapshot nextTeam = filteredTeams.get(j);
 
-                if (swapMap.containsValue(nextTeam) || nextTeam.getColor() == team.getColor() || nextTeam.isBedDestroyed() != team.isBedDestroyed()) {
+                if (swapMap.containsValue(nextTeam) || nextTeam.getColor().equals(team.getColor()) || nextTeam.isBedDestroyed() != team.isBedDestroyed()) {
                     continue;
                 }
 
