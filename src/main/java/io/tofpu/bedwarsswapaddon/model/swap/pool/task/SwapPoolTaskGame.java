@@ -60,7 +60,12 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             final TeamSnapshot team = filteredTeams.get(i);
 
             if (i == filteredTeams.size() - 1) {
-                swapMap.put(team, filteredTeams.get(0));
+                final TeamSnapshot nextTeam = filteredTeams.get(0);
+                if (nextTeam.isBedDestroyed() != team.isBedDestroyed()) {
+                    LogHandler.get().debug("Nothing to swap with. Exiting...");
+                    return;
+                }
+                swapMap.put(team, nextTeam);
             }
 
             for (int j = i + 1; j < filteredTeams.size(); j++) {
@@ -75,6 +80,8 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             }
         }
 
+
+        LogHandler.get().debug("swapMap: " + swapMap.entrySet().stream().map(entry -> entry.getKey().getName() + " -> " + entry.getValue().getName()).collect(Collectors.joining(", ")));
         for (final Map.Entry<TeamSnapshot, TeamSnapshot> entry : swapMap.entrySet()) {
             final TeamSnapshot from = entry.getKey();
             final TeamSnapshot to = entry.getValue();
@@ -87,6 +94,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
                     "%team%", TeamUtil.teamOf(to.getColor())), from);
 
             subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, from, to)));
+
             LogHandler.get().debug(String.format(AFTER_FORMAT_DEBUG,
                     from.getColor(), from.getMembers().size(),
                     from.getLiveMembers().size(),

@@ -102,8 +102,9 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase<Map<IArena, Long>> 
 
     @Override
     public void unregisterArena(final IArena arena) {
-        LogHandler.get().debug("Unregistering arena " + arena.getArenaName());
-        this.arenaMap.remove(arena);
+        if (this.arenaMap.remove(arena) != null) {
+            LogHandler.get().debug("Unregistering arena " + arena.getArenaName());
+        }
     }
 
     @Override

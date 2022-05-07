@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+// TODO: fix issues with rejoin
+// https://github.com/andrei1058/BedWars1058/blob/98cfa34e3fed2e4106cd4228af7269b08938e6d2/bedwars-plugin/src/main/java/com/andrei1058/bedwars/arena/Arena.java#L744
 public class TeamSwapTask implements SubTask {
     @Override
     public void run(final SubTaskContext context) {

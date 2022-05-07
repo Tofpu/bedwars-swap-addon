@@ -1,9 +1,12 @@
 package io.tofpu.bedwarsswapaddon.listener;
 
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
+import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
+import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.SwapHandlerBase;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,7 +20,13 @@ public class BedwarsListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onPlayerJoinArena(final TeamAssignEvent event) {
+    private void onPlayerJoinArena(final GameStateChangeEvent event) {
+        LogHandler.get().debug("GameStateChangeEvent: " + event.getNewState() + " for arena: " + event.getArena().getArenaName());
+
+        if (event.getNewState() != GameState.playing) {
+            return;
+        }
+
         final IArena arena = event.getArena();
 
         if (!isSwappageArena(arena)) {

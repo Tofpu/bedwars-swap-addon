@@ -16,7 +16,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +36,7 @@ public class TeamSnapshot implements ITeam {
     private final LinkedList<EnemyBaseEnterTrap> enemyBaseEnterTraps;
     private final List<Player> members;
     private final List<Player> membersCache;
-    private boolean bedDestroyed = false;
+    private boolean bedDestroyed;
     private Vector killDropsLoc = null;
     private final List<IGenerator> generators;
     private final ConcurrentHashMap<String, Integer> teamUpgradeList;
@@ -66,7 +65,7 @@ public class TeamSnapshot implements ITeam {
                 .clone();
         this.teamUpgrades = team.getTeamUpgrades()
                 .clone();
-        this.arena = (Arena) team.getArena();
+        this.arena = team.getArena();
         this.generators = new ArrayList<>(team.getGenerators());
         this.teamUpgradeList = new ConcurrentHashMap<>(team.getTeamUpgradeTiers());
         this.teamEffects = new ArrayList<>(team.getTeamEffects());
@@ -80,6 +79,8 @@ public class TeamSnapshot implements ITeam {
         this.members = new ArrayList<>(team.getMembers());
         this.membersCache = new ArrayList<>(team.getMembersCache());
         this.playerSnapshots = new ArrayList<>();
+
+        this.bedDestroyed = team.isBedDestroyed();
 
         for (final Player player : team.getMembers()) {
             this.playerSnapshots.add(PlayerSnapshot.of(player));
@@ -229,7 +230,7 @@ public class TeamSnapshot implements ITeam {
 
     @Override
     public boolean isBedDestroyed() {
-        return originalTeam.isBedDestroyed();
+        return bedDestroyed;
     }
 
     @Override
@@ -357,7 +358,30 @@ public class TeamSnapshot implements ITeam {
         return this.originalTeam.getTeamEffects();
     }
 
+    public boolean isLiveBedDestroyed() {
+        return this.originalTeam.isBedDestroyed();
+    }
+
     public ITeam getOriginalTeam() {
         return this.originalTeam;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final TeamSnapshot that = (TeamSnapshot) o;
+
+        return getColor().equals(that.getColor());
+    }
+
+    @Override
+    public int hashCode() {
+        return getColor().hashCode();
     }
 }
