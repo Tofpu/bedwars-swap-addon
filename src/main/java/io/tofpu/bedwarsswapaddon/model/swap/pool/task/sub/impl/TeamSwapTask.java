@@ -1,8 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
-import com.andrei1058.bedwars.upgrades.UpgradesManager;
-import com.andrei1058.bedwars.upgrades.menu.MenuUpgrade;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;

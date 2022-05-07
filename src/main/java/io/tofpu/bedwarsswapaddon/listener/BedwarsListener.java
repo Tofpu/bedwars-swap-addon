@@ -36,6 +36,6 @@ public class BedwarsListener implements Listener {
     }
 
     private boolean isSwappageArena(final IArena arena) {
-        return arena.getGroup().equals("swappage") || arena.getGroup().equals("swap");
+        return arena.getGroup().equalsIgnoreCase("swappage") || arena.getGroup().equalsIgnoreCase("swap");
     }
 }

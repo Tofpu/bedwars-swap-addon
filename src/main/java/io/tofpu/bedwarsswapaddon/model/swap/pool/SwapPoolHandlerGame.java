@@ -21,8 +21,8 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase<Map<IArena, Long>> 
     private static final String FOUND_ARENA_DEBUG = "Found arena: %s with elapsed time:" +
                                                     " %s seconds and target time: %s seconds";
     private static final String RUNNING_TASK_DEBUG = "Running task: %s";
-    public static final String LESS_THAN_TWO_PLAYERS_DEBUG = "Arena %s has less than 2 " +
-                                                             "players, removing...";
+    public static final String LESS_THAN_TWO_TEAMS_DEBUG = "Arena %s has less than 2 " +
+                                                           "teams, removing...";
 
     private final Map<IArena, Long> arenaMap;
     private int minimumInterval, maximumInterval = -1;
@@ -60,8 +60,11 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase<Map<IArena, Long>> 
                         LogHandler.get().debug(String.format(FOUND_ARENA_DEBUG,
                                 arena.getArenaName(), elapsedSeconds, randomizedInterval));
 
-                        if (arena.getPlayers().size() < 2) {
-                            LogHandler.get().debug(String.format(LESS_THAN_TWO_PLAYERS_DEBUG, arena.getArenaName()));
+                        if (arena.getTeams()
+                                    .stream()
+                                    .filter(team -> team.getSize() != 0)
+                                    .count() < 2) {
+                            LogHandler.get().debug(String.format(LESS_THAN_TWO_TEAMS_DEBUG, arena.getArenaName()));
                             this.arenaMap.remove(arena);
                             continue;
                         }
