@@ -31,8 +31,6 @@ public abstract class SwapPoolHandlerBase<C> {
 
     public abstract void unregisterArena(final IArena arena);
 
-    public abstract void handleRejoin(final Player player, final IArena arena);
-
     public JavaPlugin getPlugin() {
         return plugin;
     }

@@ -3,6 +3,7 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 import com.andrei1058.bedwars.api.arena.IArena;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
+import io.tofpu.bedwarsswapaddon.model.swap.rejoin.MainRejoinProvider;
 
 import java.util.List;
 
@@ -13,14 +14,14 @@ public abstract class SwapPoolTaskBase {
 
     public static class SwapPoolTaskContext {
         private final IArena arena;
-        private final SwapPoolHandlerGame.ArenaTracker arenaTracker;
+        private final MainRejoinProvider.ArenaTracker arenaTracker;
 
-        public SwapPoolTaskContext(final IArena arena, final SwapPoolHandlerGame.ArenaTracker arenaTracker) {
+        public SwapPoolTaskContext(final IArena arena, final MainRejoinProvider.ArenaTracker arenaTracker) {
             this.arena = arena;
             this.arenaTracker = arenaTracker;
         }
 
-        public SwapPoolHandlerGame.ArenaTracker getArenaTracker() {
+        public MainRejoinProvider.ArenaTracker getArenaTracker() {
             return arenaTracker;
         }
 

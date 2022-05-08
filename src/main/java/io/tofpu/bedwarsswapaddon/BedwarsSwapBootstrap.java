@@ -13,6 +13,8 @@ import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
 import io.tofpu.bedwarsswapaddon.model.swap.SwapHandlerGame;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerBase;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
+import io.tofpu.bedwarsswapaddon.model.swap.rejoin.MainRejoinProvider;
+import io.tofpu.bedwarsswapaddon.model.swap.rejoin.RejoinProviderBase;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,8 +27,9 @@ public class BedwarsSwapBootstrap {
     private final JavaPlugin javaPlugin;
     private SwapHandlerGame swapHandler;
     private SwapPoolHandlerBase<?> swapPoolhandler;
-    private ReloadHandlerBase reloadHandler;
+    private RejoinProviderBase rejoinProvider;
     private BedWars bedwarsAPI;
+    private ReloadHandlerBase reloadHandler;
     private boolean unitTest = false;
 
     public BedwarsSwapBootstrap(final JavaPlugin javaPlugin) {
@@ -47,8 +50,9 @@ public class BedwarsSwapBootstrap {
                     .getProvider();
         }
 
-        this.swapPoolhandler = new SwapPoolHandlerGame(javaPlugin, bedwarsAPI);
-        this.swapHandler = new SwapHandlerGame(swapPoolhandler);
+        this.rejoinProvider = new MainRejoinProvider();
+        this.swapPoolhandler = new SwapPoolHandlerGame(javaPlugin, bedwarsAPI, rejoinProvider);
+        this.swapHandler = new SwapHandlerGame(swapPoolhandler, rejoinProvider);
         this.reloadHandler = new MainReloadHandler(swapPoolhandler);
 
         LogHandler.get().log("Loading the configuration...");
