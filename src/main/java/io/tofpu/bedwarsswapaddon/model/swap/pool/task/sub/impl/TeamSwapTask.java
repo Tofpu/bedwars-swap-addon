@@ -1,5 +1,7 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
@@ -24,10 +26,10 @@ public class TeamSwapTask implements SubTask {
     private void switchTeam(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
         final List<Player> currentTeamMembers = currentTeam.getMembers();
 
-        toTeam.getLiveMembers()
-                .addAll(currentTeamMembers);
         currentTeam.getLiveMembers()
                 .removeAll(currentTeamMembers);
+        toTeam.getLiveMembers()
+                .addAll(currentTeamMembers);
     }
 
     // TODO: tiers is not being shown in the upgrades menu; need to fix this
@@ -78,6 +80,7 @@ public class TeamSwapTask implements SubTask {
             if (scoreboard == null) {
                 continue;
             }
+
             scoreboard.handlePlayerList();
         }
     }

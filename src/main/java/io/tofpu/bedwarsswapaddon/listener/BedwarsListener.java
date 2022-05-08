@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.events.gameplay.GameEndEvent;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.events.gameplay.TeamAssignEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerJoinArenaEvent;
+import com.andrei1058.bedwars.api.events.player.PlayerReJoinEvent;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.SwapHandlerBase;
 import org.bukkit.event.EventHandler;
@@ -42,6 +43,16 @@ public class BedwarsListener implements Listener {
             return;
         }
         this.swapHandler.unregisterArena(arena);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private void onPlayerRejoin(final PlayerReJoinEvent event) {
+        if (!isSwappageArena(event.getArena())) {
+            return;
+        }
+
+        event.setCancelled(true);
+        this.swapHandler.handleRejoin(event.getPlayer(), event.getArena());
     }
 
     private boolean isSwappageArena(final IArena arena) {

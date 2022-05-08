@@ -93,6 +93,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
                     "%team%", TeamUtil.teamOf(to.getColor())), from);
 
+            context.getArenaTracker().swapTeams(from, to);
             subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, from, to)));
 
             LogHandler.get().debug(String.format(AFTER_FORMAT_DEBUG,

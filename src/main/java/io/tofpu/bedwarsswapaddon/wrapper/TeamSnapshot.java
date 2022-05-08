@@ -171,11 +171,12 @@ public class TeamSnapshot implements ITeam {
     @Override
     public void reJoin(final Player player) {
         // do nothing
+        this.originalTeam.reJoin(player);
     }
 
     @Override
     public void reJoin(final Player player, final int i) {
-        // do nothing
+        this.originalTeam.reJoin(player, i);
     }
 
     @Override

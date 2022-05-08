@@ -1,11 +1,13 @@
 package io.tofpu.bedwarsswapaddon.model.configuration.section;
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 @ConfigSerializable
 public class GeneralSection {
     @Setting("enable-debug-mode")
+    @Comment("By enabling this, you will be able to see the debug messages in the console.")
     private boolean debug = false;
 
     public boolean isDebug() {
