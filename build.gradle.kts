@@ -78,10 +78,7 @@ tasks {
                     ".messagepresenter")
             relocate("com.cryptomorin", "io.tofpu.bedwarsswapaddon.lib" +
                     ".xseries")
-
-            exclude("")
-
-//            relocate("revxrsal", "io.tofpu.speedbridge2.lib.lamp")
+            relocate("revxrsal", "io.tofpu.bedwarsswapaddon.lib.lamp")
         }
 
         exclude("META-INF/**")
