@@ -25,5 +25,5 @@ jobs:
       - name: Uploading
         uses: actions/upload-artifact@v2
         with:
-          name: SpeedBridge-2
+          name: bedwars-swap-addon
           path: ${{ github.workspace }}/build/libs/*.jar
