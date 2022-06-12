@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.tofpu"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenLocal()
@@ -54,6 +54,12 @@ dependencies {
 //        }
 //    }
 //}
+
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(8))
+  }
+}
 
 tasks {
     withType<JavaCompile> {
