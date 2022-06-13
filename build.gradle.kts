@@ -22,9 +22,8 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 
     // depending on the bedwars implementation of the bedwars api
-    compileOnly("com.andrei1058.bedwars:bedwars-plugin:22.3-SNAPSHOT")
+    compileOnly("com.github.Tofpu.bedwars1058-wrapper:bedwars-plugin:wrapper-d7f445fdf7-1")
 
-//    compileOnly("com.andrei1058.bedwars:BedWars1058:bedwars-plugin:22.3-SNAPSHOT")
     compileOnly("com.andrei1058.bedwars:bedwars-api:22.3.4")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
 
