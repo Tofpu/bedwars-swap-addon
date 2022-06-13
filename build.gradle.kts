@@ -25,7 +25,7 @@ dependencies {
     compileOnly("com.andrei1058.bedwars:bedwars-plugin:22.3-SNAPSHOT")
 
 //    compileOnly("com.andrei1058.bedwars:BedWars1058:bedwars-plugin:22.3-SNAPSHOT")
-    implementation("com.andrei1058.bedwars:bedwars-api:22.3.4")
+    compileOnly("com.andrei1058.bedwars:bedwars-api:22.3.4")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
 
     implementation("com.github.tofpu:dynamic-message:1.0.6")
