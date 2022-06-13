@@ -16,13 +16,14 @@ repositories {
     maven("https://jitpack.io")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.andrei1058.dev/releases/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 
     // depending on the bedwars implementation of the bedwars api
-    compileOnly("com.github.Tofpu.bedwars1058-wrapper:bedwars-plugin:wrapper-d7f445fdf7-1")
+    compileOnly("com.github.Tofpu.bedwars1058-wrapper:bedwars-plugin:wrapper-SNAPSHOT")
 
     compileOnly("com.andrei1058.bedwars:bedwars-api:22.3.4")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
