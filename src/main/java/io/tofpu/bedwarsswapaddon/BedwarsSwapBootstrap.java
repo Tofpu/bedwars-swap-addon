@@ -1,5 +1,6 @@
 package io.tofpu.bedwarsswapaddon;
 
+import org.bstats.bukkit.Metrics;
 import com.andrei1058.bedwars.api.BedWars;
 import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.command.CommandHandler;
@@ -23,6 +24,7 @@ import java.io.File;
 public class BedwarsSwapBootstrap {
     public static final File ADDON_DIRECTORY = new File(
             "plugins/BedWars1058/Addons/Swap");
+    private static final int METRIC_ID = 15454;
 
     private final JavaPlugin javaPlugin;
     private SwapHandlerGame swapHandler;
@@ -81,7 +83,12 @@ public class BedwarsSwapBootstrap {
         LogHandler.get().log("Generating the help message...");
         HelpPresenterHolder.generatePresenter(javaPlugin.getDescription());
 
+        registerBstats();
         registerListeners();
+    }
+
+    private void registerBstats() {
+        new Metrics(javaPlugin, METRIC_ID);
     }
 
     private void registerListeners() {

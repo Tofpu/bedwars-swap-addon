@@ -38,6 +38,8 @@ dependencies {
     implementation("com.github.Revxrsal.Lamp:common:3.0.4")
     implementation("com.github.Revxrsal.Lamp:bukkit:3.0.4")
 
+    implementation("org.bstats:bstats-bukkit:3.0.0")
+
     // for the multi-action bar support
     implementation("com.github.cryptomorin:XSeries:8.7.1")
 
@@ -87,6 +89,7 @@ tasks {
             relocate("com.cryptomorin", "io.tofpu.bedwarsswapaddon.lib" +
                     ".xseries")
             relocate("revxrsal", "io.tofpu.bedwarsswapaddon.lib.lamp")
+            relocate("org.bstats", "io.tofpu.bedwarsswapaddon.lib.bstats")
         }
 
         exclude("META-INF/**")
