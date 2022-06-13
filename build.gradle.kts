@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.tofpu"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenLocal()
@@ -16,16 +16,16 @@ repositories {
     maven("https://jitpack.io")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.andrei1058.dev/releases/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 
     // depending on the bedwars implementation of the bedwars api
-    compileOnly("com.andrei1058.bedwars:bedwars-plugin:22.3-SNAPSHOT")
+    compileOnly("com.github.Tofpu.bedwars1058-wrapper:bedwars-plugin:wrapper-SNAPSHOT")
 
-//    compileOnly("com.andrei1058.bedwars:BedWars1058:bedwars-plugin:22.3-SNAPSHOT")
-    implementation("com.andrei1058.bedwars:bedwars-api:22.3.4")
+    compileOnly("com.andrei1058.bedwars:bedwars-api:22.3.4")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
 
     implementation("com.github.tofpu:dynamic-message:1.0.6")
@@ -37,6 +37,8 @@ dependencies {
     implementation("net.kyori:adventure-text-minimessage:4.10.1")
     implementation("com.github.Revxrsal.Lamp:common:3.0.4")
     implementation("com.github.Revxrsal.Lamp:bukkit:3.0.4")
+
+    implementation("org.bstats:bstats-bukkit:3.0.0")
 
     // for the multi-action bar support
     implementation("com.github.cryptomorin:XSeries:8.7.1")
@@ -87,6 +89,7 @@ tasks {
             relocate("com.cryptomorin", "io.tofpu.bedwarsswapaddon.lib" +
                     ".xseries")
             relocate("revxrsal", "io.tofpu.bedwarsswapaddon.lib.lamp")
+            relocate("org.bstats", "io.tofpu.bedwarsswapaddon.lib.bstats")
         }
 
         exclude("META-INF/**")

@@ -23,7 +23,7 @@ public class HelpPresenterHolder {
     private static final String TITLE = "<white><bold>%s</bold>";
     private static final String KEY_STYLE = "<yellow>%s";
     private static final String VALUE_STYLE = "<white>%s";
-    private static final String COMMAND_STYLE = "<yellow>/sb %s %s<dark_gray>- <white>%s";
+    private static final String COMMAND_STYLE = "<yellow>/swap %s %s<dark_gray>- <white>%s";
 
     public static void generatePresenter(final PluginDescriptionFile description) {
         instance = new HelpPresenterHolder();
