@@ -25,14 +25,19 @@ public class TeamSwapTask implements SubTask {
 
     private void switchTeam(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
         final List<Player> currentTeamMembers = currentTeam.getMembers();
+        final List<Player> currentTeamMembersCache = currentTeam.getMembersCache();
 
         currentTeam.getLiveMembers()
                 .removeAll(currentTeamMembers);
         toTeam.getLiveMembers()
                 .addAll(currentTeamMembers);
+
+        currentTeam.getLiveMembersCache()
+                .removeAll(currentTeamMembersCache);
+        toTeam.getLiveMembersCache()
+                .addAll(currentTeamMembersCache);
     }
 
-    // TODO: tiers is not being shown in the upgrades menu; need to fix this
     private void switchTeamTiers(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
         // swaps the team upgrades
 
