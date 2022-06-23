@@ -1,13 +1,12 @@
 package io.tofpu.bedwarsswapaddon;
 
-import org.bstats.bukkit.Metrics;
 import com.andrei1058.bedwars.api.BedWars;
-import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
+import io.tofpu.bedwarsswapaddon.listener.BedwarsListener;
 import io.tofpu.bedwarsswapaddon.model.command.CommandHandler;
 import io.tofpu.bedwarsswapaddon.model.command.presenter.HelpPresenterHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
+import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
-import io.tofpu.bedwarsswapaddon.listener.BedwarsListener;
 import io.tofpu.bedwarsswapaddon.model.meta.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.reload.MainReloadHandler;
 import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
@@ -16,6 +15,8 @@ import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerBase;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.SwapPoolHandlerGame;
 import io.tofpu.bedwarsswapaddon.model.swap.rejoin.MainRejoinProvider;
 import io.tofpu.bedwarsswapaddon.model.swap.rejoin.RejoinProviderBase;
+import io.tofpu.bedwarsswapaddon.util.UpdateChecker;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -82,6 +83,23 @@ public class BedwarsSwapBootstrap {
 
         LogHandler.get().log("Generating the help message...");
         HelpPresenterHolder.generatePresenter(javaPlugin.getDescription());
+
+        LogHandler.get().log("Checking for an update...");
+        UpdateChecker.init(javaPlugin, 100619)
+                .requestUpdateCheck()
+                .whenComplete((updateResult, throwable) -> {
+                    if (throwable != null) {
+                        LogHandler.get().log("Couldn't check for an update...");
+                        return;
+                    }
+
+                    if (updateResult.requiresUpdate()) {
+                        LogHandler.get().log("You're using an outdated version of BedwarsSwapAddon!");
+                        LogHandler.get().log("You can download the latest version at https://www.spigotmc.org/resources/.102551/");
+                    } else {
+                        LogHandler.get().log("You're using the latest version!");
+                    }
+                });
 
         registerBstats();
         registerListeners();
