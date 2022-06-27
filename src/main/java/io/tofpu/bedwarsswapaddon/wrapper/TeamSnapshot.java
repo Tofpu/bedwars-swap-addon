@@ -323,6 +323,10 @@ public class TeamSnapshot implements ITeam {
         return this.originalTeam.getMembers();
     }
 
+    public List<Player> getLiveMembersCache() {
+        return this.originalTeam.getMembersCache();
+    }
+
     public Map<String, Integer> getLiveTeamUpgradeTiers() {
         return this.originalTeam.getTeamUpgradeTiers();
     }
