@@ -104,4 +104,31 @@ public class TeamSnapshot {
     public ArrayList<PlayerSnapshot> getMemberSnapshots() {
         return memberSnapshots;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder(getLive().getName());
+
+        if (!getLive().getMembers().isEmpty()) {
+            builder.append(" with");
+        }
+
+        for (final Player player : getLive().getMembers()) {
+            builder.append(" ").append(player.getName()).append(",");
+        }
+
+        if (!getCachedMembers().isEmpty()) {
+            if (getLive().getMembers().isEmpty()) {
+                builder.append(" with");
+            } else {
+                builder.deleteCharAt(builder.length() - 1).append(" and");
+            }
+        }
+
+        for (final Player player : getCachedMembers()) {
+            builder.append(" ").append(player.getName()).append(",");
+        }
+
+        return builder.substring(0, builder.length() - 1);
+    }
 }

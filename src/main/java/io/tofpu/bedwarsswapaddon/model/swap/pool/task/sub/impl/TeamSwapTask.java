@@ -23,18 +23,17 @@ public class TeamSwapTask implements SubTask {
     }
 
     private void switchTeam(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
-        final List<Player> currentTeamMembers = currentTeam.getCachedMembers();
-        final List<Player> currentTeamMembersCache = currentTeam.getCachedMembersCache();
+        currentTeam.getLive().getMembers().clear();
+        currentTeam.getLive().getMembersCache().clear();
 
-        currentTeam.getLive().getMembers()
-                .removeAll(currentTeamMembers);
-        toTeam.getLive().getMembers()
-                .addAll(currentTeamMembers);
+        toTeam.getLive().getMembers().clear();
+        toTeam.getLive().getMembersCache().clear();
 
-        currentTeam.getLive().getMembersCache()
-                .removeAll(currentTeamMembersCache);
-        toTeam.getLive().getMembersCache()
-                .addAll(currentTeamMembersCache);
+        toTeam.getLive().getMembers().addAll(currentTeam.getCachedMembers());
+        toTeam.getLive().getMembersCache().addAll(currentTeam.getCachedMembersCache());
+
+        currentTeam.getLive().getMembers().addAll(toTeam.getCachedMembers());
+        currentTeam.getLive().getMembersCache().addAll(toTeam.getCachedMembersCache());
     }
 
     private void switchTeamTiers(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
