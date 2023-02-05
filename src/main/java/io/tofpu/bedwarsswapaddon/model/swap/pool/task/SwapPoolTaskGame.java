@@ -30,7 +30,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             "\n" + "Next Item:\n " + " Team: %s\n" + "  Size: %s : %s\n" +
             "  Members: %s : %s";
 
-    private static final String SWAPPING_WITH_DEBUG = "Swapping %s with %s";
+    private static final String SWAPPING_WITH_DEBUG = "Swapping both %s and %s";
 
     @Override
     public void run(final SwapPoolTaskContext context) {
@@ -57,16 +57,24 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
         final Map<TeamSnapshot, TeamSnapshot> swapMap = new HashMap<>();
 
         for (int i = 0; i < filteredTeams.size(); i++) {
+            boolean pauseSearch = false;
             final TeamSnapshot team = filteredTeams.get(i);
 
-            // last team
-            if (i == filteredTeams.size() - 1) {
-                final TeamSnapshot nextTeam = filteredTeams.get(0);
+            // if the next team is the last team
+            if (i == filteredTeams.size() - 2) {
+                final TeamSnapshot nextTeam = filteredTeams.get(i + 1);
+                // do not swap teams that have different bed destroyed states
                 if (nextTeam.isCachedBedDestroyed() != team.isCachedBedDestroyed()) {
                     LogHandler.get().debug("Nothing to swap with. Exiting...");
                     return;
                 }
                 swapMap.put(team, nextTeam);
+                pauseSearch = true;
+            }
+
+            // if the search was complete, do not continue
+            if (pauseSearch) {
+                break;
             }
 
             for (int j = i + 1; j < filteredTeams.size(); j++) {
@@ -82,7 +90,8 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
         }
 
 
-        LogHandler.get().debug("swapMap: " + swapMap.entrySet().stream().map(entry -> entry.getKey().getName() + " -> " + entry.getValue().getName()).collect(Collectors.joining(", ")));
+        LogHandler.get().debug("swapMap: " + swapMap.entrySet().stream().map(entry -> entry.getKey().getName() + " " +
+                                                                                      "<-> " + entry.getValue().getName()).collect(Collectors.joining(", ")));
         for (final Map.Entry<TeamSnapshot, TeamSnapshot> entry : swapMap.entrySet()) {
             final TeamSnapshot from = entry.getKey();
             final TeamSnapshot to = entry.getValue();
