@@ -1,7 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl;
 
-import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.arena.ReJoin;
+import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
@@ -24,17 +23,17 @@ public class TeamSwapTask implements SubTask {
     }
 
     private void switchTeam(final TeamSnapshot currentTeam, final TeamSnapshot toTeam) {
-        final List<Player> currentTeamMembers = currentTeam.getMembers();
-        final List<Player> currentTeamMembersCache = currentTeam.getMembersCache();
+        final List<Player> currentTeamMembers = currentTeam.getCachedMembers();
+        final List<Player> currentTeamMembersCache = currentTeam.getCachedMembersCache();
 
-        currentTeam.getLiveMembers()
+        currentTeam.getLive().getMembers()
                 .removeAll(currentTeamMembers);
-        toTeam.getLiveMembers()
+        toTeam.getLive().getMembers()
                 .addAll(currentTeamMembers);
 
-        currentTeam.getLiveMembersCache()
+        currentTeam.getLive().getMembersCache()
                 .removeAll(currentTeamMembersCache);
-        toTeam.getLiveMembersCache()
+        toTeam.getLive().getMembersCache()
                 .addAll(currentTeamMembersCache);
     }
 
@@ -42,43 +41,43 @@ public class TeamSwapTask implements SubTask {
         // swaps the team upgrades
 
         // resetting the next team data
-        toTeam.getLiveTeamUpgradeTiers()
-                .keySet().removeAll(toTeam.getTeamUpgradeTiers().keySet());
-        toTeam.getLiveSwordsEnchantments()
-                .removeAll(toTeam.getSwordsEnchantments());
-        toTeam.getLiveArmorsEnchantments()
-                .removeAll(toTeam.getArmorsEnchantments());
-        toTeam.getLiveBowsEnchantments()
-                .removeAll(toTeam.getBowsEnchantments());
-        toTeam.getLiveActiveTraps()
-                .removeAll(toTeam.getActiveTraps());
-        toTeam.getLiveBaseEffects()
-                .removeAll(toTeam.getBaseEffects());
-        toTeam.getTeamEffects()
-                .removeAll(toTeam.getTeamEffects());
+        toTeam.getLive().getTeamUpgradeTiers()
+                .keySet().removeAll(toTeam.getCachedTeamUpgradeTiers().keySet());
+        toTeam.getLive().getSwordsEnchantments()
+                .removeAll(toTeam.getCachedSwordsEnchantments());
+        toTeam.getLive().getArmorsEnchantments()
+                .removeAll(toTeam.getCachedArmorsEnchantments());
+        toTeam.getLive().getBowsEnchantments()
+                .removeAll(toTeam.getCachedBowsEnchantments());
+        toTeam.getLive().getActiveTraps()
+                .removeAll(toTeam.getCachedActiveTraps());
+        toTeam.getLive().getBaseEffects()
+                .removeAll(toTeam.getCachedBaseEffects());
+        ((BedWarsTeam) toTeam.getLive()).getTeamEffects()
+                .removeAll(toTeam.getCachedTeamEffects());
 
         // adding the current team data to the next team
-        toTeam.getLiveTeamUpgradeTiers()
-                .putAll(currentTeam.getTeamUpgradeTiers());
-        toTeam.getLiveSwordsEnchantments()
-                .addAll(currentTeam.getSwordsEnchantments());
-        toTeam.getLiveArmorsEnchantments()
-                .addAll(currentTeam.getArmorsEnchantments());
-        toTeam.getLiveBowsEnchantments()
-                .addAll(currentTeam.getBowsEnchantments());
-        toTeam.getLiveActiveTraps()
-                .addAll(currentTeam.getActiveTraps());
-        toTeam.getLiveBaseEffects()
-                .addAll(currentTeam.getBaseEffects());
-        toTeam.getTeamEffects()
-                .addAll(currentTeam.getTeamEffects());
+        toTeam.getLive().getTeamUpgradeTiers()
+                .putAll(currentTeam.getCachedTeamUpgradeTiers());
+        toTeam.getLive().getSwordsEnchantments()
+                .addAll(currentTeam.getCachedSwordsEnchantments());
+        toTeam.getLive().getArmorsEnchantments()
+                .addAll(currentTeam.getCachedArmorsEnchantments());
+        toTeam.getLive().getBowsEnchantments()
+                .addAll(currentTeam.getCachedBowsEnchantments());
+        toTeam.getLive().getActiveTraps()
+                .addAll(currentTeam.getCachedActiveTraps());
+        toTeam.getLive().getBaseEffects()
+                .addAll(currentTeam.getCachedBaseEffects());
+        ((BedWarsTeam) toTeam.getLive()).getTeamEffects()
+                .addAll(currentTeam.getCachedTeamEffects());
 
         LogHandler.get()
-                .debug("Before: " + toTeam.getTeamUpgradeTiers() + " After: " + toTeam.getLiveTeamUpgradeTiers());
+                .debug("Before: " + toTeam.getCachedTeamUpgradeTiers() + " After: " + toTeam.getLive().getTeamUpgradeTiers());
     }
 
     private void switchScoreboard(final TeamSnapshot toTeam) {
-        for (final Player player : toTeam.getLiveMembers()) {
+        for (final Player player : toTeam.getLive().getMembers()) {
             final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
                     .get(player.getUniqueId());
 

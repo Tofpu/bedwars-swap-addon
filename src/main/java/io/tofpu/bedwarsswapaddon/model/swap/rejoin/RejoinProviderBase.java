@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.Arena;
 import io.tofpu.bedwarsswapaddon.wrapper.RejoinArenaWrapper;
+import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public abstract class RejoinProviderBase {
         }
     }
 
-    public class ArenaTracker {
+    public static class ArenaTracker {
         private final IArena arena;
         private final List<TeamTracker> teamTrackers;
 
@@ -80,11 +81,11 @@ public abstract class RejoinProviderBase {
             return this.arena;
         }
 
-        public void swapTeams(final ITeam from, final ITeam to) {
+        public void swapTeams(final TeamSnapshot from, final TeamSnapshot to) {
             for (final TeamTracker teamTracker : this.teamTrackers) {
-                for (final Player player : from.getMembers()) {
+                for (final Player player : from.getCachedMembers()) {
                     if (teamTracker.isInTeam(player)) {
-                        teamTracker.setCurrentTeam(to);
+                        teamTracker.setCurrentTeam(to.getLive());
                     }
                 }
             }

@@ -45,6 +45,9 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testImplementation("com.github.mockbukkit:MockBukkit:v1.16-SNAPSHOT")
+    testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation("com.github.Tofpu.bedwars1058-wrapper:bedwars-plugin:wrapper-SNAPSHOT")
+
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
