@@ -19,7 +19,7 @@ public class InventorySwapTask implements SubTask {
         final TeamSnapshot toTeam = context.getToTeam();
 
         final List<Player> currentPlayers = currentTeam
-                .getMembers();
+                .getCachedMembers();
 
         currentPlayers.forEach(member -> {
             if (isUnavailable(context.getArena(), member)) {

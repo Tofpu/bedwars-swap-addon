@@ -5,7 +5,6 @@ import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.util.VectorUtil;
 import io.tofpu.bedwarsswapaddon.wrapper.PlayerSnapshot;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -15,9 +14,9 @@ public class LocationSwapTask implements SubTask {
         final IArena arena = context.getArena();
 
         final List<Player> currentTeamMembers = context.getCurrentTeam()
-                .getMembers();
+                .getCachedMembers();
         final List<PlayerSnapshot> toTeamMembers = context.getToTeam()
-                .getPlayerSnapshots();
+                .getMemberSnapshots();
         for (int i = 0;
              i < currentTeamMembers.size(); i++) {
             final Player currentPlayer = currentTeamMembers.get(i);
@@ -28,7 +27,7 @@ public class LocationSwapTask implements SubTask {
             // if the toPlayer is null, and the currentPlayer is available,
             // then teleport the currentPlayer to the toPlayer
             if (toPlayer == null && isAvailable) {
-                currentPlayer.teleport(context.getToTeam().getSpawn());
+                currentPlayer.teleport(context.getToTeam().getLive().getSpawn());
                 currentPlayer.setVelocity(VectorUtil.EMPTY_VELOCITY);
                 continue;
             }
@@ -37,7 +36,7 @@ public class LocationSwapTask implements SubTask {
             // then teleport the toPlayer to the currentPlayer
             if (toPlayer != null && isAvailable) {
                 if (isUnavailable(arena, toPlayer.getPlayer())) {
-                    currentPlayer.teleport(context.getToTeam().getSpawn());
+                    currentPlayer.teleport(context.getToTeam().getLive().getSpawn());
                     currentPlayer.setVelocity(VectorUtil.EMPTY_VELOCITY);
                     continue;
                 }

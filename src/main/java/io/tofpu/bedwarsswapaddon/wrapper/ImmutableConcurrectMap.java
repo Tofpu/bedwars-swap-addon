@@ -7,6 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ImmutableConcurrectMap<K, V> extends ConcurrentHashMap<K, V> {
     public ImmutableConcurrectMap(final ConcurrentHashMap<K, V> map) {
+        if (map == null) {
+            return;
+        }
         super.putAll(map);
     }
 

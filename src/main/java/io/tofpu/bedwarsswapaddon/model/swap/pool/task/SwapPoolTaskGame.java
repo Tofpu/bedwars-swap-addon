@@ -7,8 +7,8 @@ import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.InventorySwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.LocationSwapTask;
 import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.TeamSwapTask;
-import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
 import io.tofpu.bedwarsswapaddon.util.TeamUtil;
+import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -59,9 +59,10 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
         for (int i = 0; i < filteredTeams.size(); i++) {
             final TeamSnapshot team = filteredTeams.get(i);
 
+            // last team
             if (i == filteredTeams.size() - 1) {
                 final TeamSnapshot nextTeam = filteredTeams.get(0);
-                if (nextTeam.isBedDestroyed() != team.isBedDestroyed()) {
+                if (nextTeam.isCachedBedDestroyed() != team.isCachedBedDestroyed()) {
                     LogHandler.get().debug("Nothing to swap with. Exiting...");
                     return;
                 }
@@ -71,7 +72,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             for (int j = i + 1; j < filteredTeams.size(); j++) {
                 final TeamSnapshot nextTeam = filteredTeams.get(j);
 
-                if (swapMap.containsValue(nextTeam) || nextTeam.getColor().equals(team.getColor()) || nextTeam.isBedDestroyed() != team.isBedDestroyed()) {
+                if (swapMap.containsValue(nextTeam) || nextTeam.getColor().equals(team.getColor()) || nextTeam.isCachedBedDestroyed() != team.isCachedBedDestroyed()) {
                     continue;
                 }
 
@@ -97,11 +98,11 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, from, to)));
 
             LogHandler.get().debug(String.format(AFTER_FORMAT_DEBUG,
-                    from.getColor(), from.getMembers().size(),
-                    from.getLiveMembers().size(),
-                    TeamUtil.toString(from.getMembers()), TeamUtil.toString(from.getLiveMembers()),
-                    to.getColor(), to.getMembers().size(), to.getLiveMembers().size(),
-                    TeamUtil.toString(to.getMembers()), TeamUtil.toString(to.getLiveMembers())));
+                    from.getColor(), from.getCachedMembers().size(),
+                    from.getLive().getMembers().size(),
+                    TeamUtil.toString(from.getCachedMembers()), TeamUtil.toString(from.getLive().getMembers()),
+                    to.getColor(), to.getCachedMembers().size(), to.getLive().getMembers().size(),
+                    TeamUtil.toString(to.getCachedMembers()), TeamUtil.toString(to.getLive().getMembers())));
         }
     }
 

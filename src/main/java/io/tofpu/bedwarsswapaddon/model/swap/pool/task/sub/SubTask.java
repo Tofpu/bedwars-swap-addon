@@ -11,7 +11,8 @@ public interface SubTask {
         private final IArena arena;
         private final TeamSnapshot currentTeam, toTeam;
 
-        public SubTaskContext(final SubTask subTask, final IArena arena, final TeamSnapshot currentTeam, final TeamSnapshot to) {
+        public SubTaskContext(final SubTask subTask, final IArena arena, final TeamSnapshot currentTeam,
+                final TeamSnapshot to) {
             this.subTask = subTask;
             this.arena = arena;
             this.currentTeam = currentTeam;
