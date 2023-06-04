@@ -189,6 +189,19 @@ public class NewSwapTest extends BedwarsHelper {
         Assertions.assertEquals(at(5, 5, 5), red.getLocation());
     }
 
+    @Test
+    void bed_snapshot_test() {
+        LiveObject redTeam = live(bedWarsTeam(TeamColor.RED, 1, false));
+        TeamSnapshot redSnapshot = snapshot(redTeam.object());
+
+        BedWarsTeam blueTeam = bedWarsTeam(TeamColor.BLUE, 1, true);
+        LiveObject blue = live(blueTeam);
+
+        Assertions.assertTrue(blueTeam.isBedDestroyed());
+        blue.use(redSnapshot); // blue -> red
+        Assertions.assertFalse(blueTeam.isBedDestroyed());
+    }
+
     @NotNull
     private static TeamEnchant teamEnchant() {
         return TEAM_ENCHANT;
