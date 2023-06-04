@@ -14,8 +14,7 @@ public class BedwarsSwapAddonPlugin extends JavaPlugin {
         super();
     }
 
-    protected BedwarsSwapAddonPlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
-    {
+    protected BedwarsSwapAddonPlugin(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
         bootstrap.setUnitTest(true);
     }

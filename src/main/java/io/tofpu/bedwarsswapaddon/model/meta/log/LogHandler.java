@@ -13,6 +13,11 @@ public class LogHandler {
     private ExecutorService executorService;
     private boolean debug;
 
+    private LogHandler() {
+        this.executorService = Executors.newSingleThreadExecutor();
+        this.debug = false;
+    }
+
     public static LogHandler get() {
         if (instance == null) {
             throw new IllegalStateException("LogHandler is not initialized");
@@ -20,18 +25,13 @@ public class LogHandler {
         return instance;
     }
 
-    private LogHandler() {
-        this.executorService = Executors.newSingleThreadExecutor();
-        this.debug = false;
+    public static synchronized void init(final Plugin plugin) {
+        instance = new LogHandler();
+        instance.setPlugin(plugin);
     }
 
     public void reload() {
         init(plugin);
-    }
-
-    public static synchronized void init(final Plugin plugin) {
-        instance = new LogHandler();
-        instance.setPlugin(plugin);
     }
 
     public void load() {
