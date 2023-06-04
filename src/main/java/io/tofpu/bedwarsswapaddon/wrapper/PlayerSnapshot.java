@@ -12,7 +12,6 @@ public class PlayerSnapshot {
     private final Location location;
     private final Vector velocity;
 
-//    private final PlayerInventorySnapshot inventorySnapshot;
 
     public static PlayerSnapshot of(Player player) {
         return new PlayerSnapshot(player);
@@ -20,10 +19,8 @@ public class PlayerSnapshot {
 
     private PlayerSnapshot(final Player player) {
         this.player = player;
-        this.location = player.getLocation().clone();
+        this.location = player.getLocation();
         this.velocity = player.getVelocity().clone();
-
-//        this.inventorySnapshot = PlayerInventorySnapshot.of(player);
     }
 
     public String getName() {

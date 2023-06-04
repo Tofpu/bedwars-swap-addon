@@ -3,14 +3,9 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 import com.andrei1058.bedwars.api.arena.IArena;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.meta.message.MessageHolder;
-import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.SubTask;
-import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.InventorySwapTask;
-import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.LocationSwapTask;
-import io.tofpu.bedwarsswapaddon.model.swap.pool.task.sub.impl.TeamSwapTask;
 import io.tofpu.bedwarsswapaddon.util.TeamUtil;
-import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +59,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             if (i == filteredTeams.size() - 2) {
                 final TeamSnapshot nextTeam = filteredTeams.get(i + 1);
                 // do not swap teams that have different bed destroyed states
-                if (nextTeam.isCachedBedDestroyed() != team.isCachedBedDestroyed()) {
+                if (nextTeam.isBedDestroyed() != team.isBedDestroyed()) {
                     LogHandler.get().debug("Nothing to swap with. Exiting...");
                     return;
                 }
@@ -80,7 +75,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             for (int j = i + 1; j < filteredTeams.size(); j++) {
                 final TeamSnapshot nextTeam = filteredTeams.get(j);
 
-                if (swapMap.containsValue(nextTeam) || nextTeam.getColor().equals(team.getColor()) || nextTeam.isCachedBedDestroyed() != team.isCachedBedDestroyed()) {
+                if (swapMap.containsValue(nextTeam) || nextTeam.getColor().equals(team.getColor()) || nextTeam.isBedDestroyed() != team.isBedDestroyed()) {
                     continue;
                 }
 
@@ -99,24 +94,18 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
             final MessageHolder messageHolder = MessageHolder.get();
             TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace(
+                    "%team%", TeamUtil.teamOf(from.getColor())), to);
+            TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace(
                     "%team%", TeamUtil.teamOf(to.getColor())), from);
+
             TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
                     "%team%", TeamUtil.teamOf(to.getColor())), from);
+            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
+                    "%team%", TeamUtil.teamOf(from.getColor())), to);
 
             context.getArenaTracker().swapTeams(from, to);
-            subTasksList().forEach(subTask -> subTask.run(new SubTask.SubTaskContext(subTask, arena, from, to)));
-
-            LogHandler.get().debug(String.format(AFTER_FORMAT_DEBUG,
-                    from.getColor(), from.getCachedMembers().size(),
-                    from.getLive().getMembers().size(),
-                    TeamUtil.toString(from.getCachedMembers()), TeamUtil.toString(from.getLive().getMembers()),
-                    to.getColor(), to.getCachedMembers().size(), to.getLive().getMembers().size(),
-                    TeamUtil.toString(to.getCachedMembers()), TeamUtil.toString(to.getLive().getMembers())));
+            from.apply(to.getLive());
+            to.apply(from.getLive());
         }
-    }
-
-    @Override
-    public List<SubTask> subTasksList() {
-        return Arrays.asList(new LocationSwapTask(), new InventorySwapTask(), new TeamSwapTask());
     }
 }
