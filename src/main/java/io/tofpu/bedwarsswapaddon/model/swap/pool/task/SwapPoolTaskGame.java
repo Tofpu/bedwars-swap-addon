@@ -44,7 +44,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
         LogHandler.get()
                 .debug("Filtered teams: " + filteredTeams.stream().map(TeamSnapshot::getName)
-                                .collect(Collectors.joining(", ")));
+                        .collect(Collectors.joining(", ")));
 
         // Rules:
         // 1. Use the live data for write, and use the copy for read.

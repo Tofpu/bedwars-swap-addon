@@ -34,6 +34,11 @@ public class NewSwapTest extends BedwarsHelper {
         }
     };
 
+    @NotNull
+    private static TeamEnchant teamEnchant() {
+        return TEAM_ENCHANT;
+    }
+
     @BeforeEach
     void setUp() {
         ArenaSpectator.clear();
@@ -200,10 +205,5 @@ public class NewSwapTest extends BedwarsHelper {
         Assertions.assertTrue(blueTeam.isBedDestroyed());
         blue.use(redSnapshot); // blue -> red
         Assertions.assertFalse(blueTeam.isBedDestroyed());
-    }
-
-    @NotNull
-    private static TeamEnchant teamEnchant() {
-        return TEAM_ENCHANT;
     }
 }

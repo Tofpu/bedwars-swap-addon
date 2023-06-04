@@ -7,7 +7,7 @@ public abstract class CommandHandlerBase {
     /**
      * This method registers the command.
      *
-     * @param plugin The plugin instance
+     * @param plugin        The plugin instance
      * @param reloadHandler The reload handler
      */
     public abstract void create(final Plugin plugin, final ReloadHandlerBase reloadHandler);

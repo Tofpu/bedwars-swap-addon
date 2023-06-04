@@ -12,7 +12,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     // for brigadier
-	maven("https://libraries.minecraft.net")
+    maven("https://libraries.minecraft.net")
     maven("https://jitpack.io")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.andrei1058.dev/releases/")
@@ -63,9 +63,9 @@ dependencies {
 //}
 
 java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(8))
-  }
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
 }
 
 tasks {

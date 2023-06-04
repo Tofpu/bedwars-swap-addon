@@ -32,6 +32,19 @@ public class TeamSnapshot implements Snapshot {
         this.isDestroyed = team.isBedDestroyed();
     }
 
+    private static void updateScoreboard(ITeam team) {
+        for (Player player : team.getMembers()) {
+            final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
+                    .get(player.getUniqueId());
+
+            if (scoreboard == null) {
+                continue;
+            }
+
+            scoreboard.handlePlayerList();
+        }
+    }
+
     public String getName() {
         return getLive().getName();
     }
@@ -99,19 +112,6 @@ public class TeamSnapshot implements Snapshot {
 
     private boolean isItemValid(final ItemStack itemStack) {
         return itemStack != null && itemStack.getType() != Material.AIR;
-    }
-
-    private static void updateScoreboard(ITeam team) {
-        for (Player player : team.getMembers()) {
-            final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
-                    .get(player.getUniqueId());
-
-            if (scoreboard == null) {
-                continue;
-            }
-
-            scoreboard.handlePlayerList();
-        }
     }
 
     public List<Player> getCachedMembers() {

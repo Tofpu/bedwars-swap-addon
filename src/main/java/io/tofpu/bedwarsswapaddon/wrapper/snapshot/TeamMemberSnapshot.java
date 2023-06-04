@@ -2,9 +2,7 @@ package io.tofpu.bedwarsswapaddon.wrapper.snapshot;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import io.tofpu.bedwarsswapaddon.BedwarsSwapBootstrap;
 import io.tofpu.bedwarsswapaddon.wrapper.PlayerSnapshot;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

@@ -1,9 +1,9 @@
 package io.tofpu.bedwarsswapaddon.model.command;
 
-import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.command.presenter.HelpPresenterHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.ConfigurationHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
+import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.meta.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;

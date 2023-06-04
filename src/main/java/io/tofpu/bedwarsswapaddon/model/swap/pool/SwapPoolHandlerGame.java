@@ -22,12 +22,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class SwapPoolHandlerGame extends SwapPoolHandlerBase<Map<IArena, Long>> {
+    public static final String LESS_THAN_TWO_TEAMS_DEBUG = "Arena %s has less than 2 " +
+                                                           "teams, removing...";
     private static final String FOUND_ARENA_DEBUG = "Found arena: %s with elapsed time:" +
                                                     " %s seconds and target time: %s seconds";
     private static final String RUNNING_TASK_DEBUG = "Running task: %s";
-    public static final String LESS_THAN_TWO_TEAMS_DEBUG = "Arena %s has less than 2 " +
-                                                           "teams, removing...";
-
     private final Map<IArena, Long> arenaMap;
     private final RejoinProviderBase rejoinProvider;
     private int minimumInterval, maximumInterval = -1;
@@ -50,46 +49,46 @@ public class SwapPoolHandlerGame extends SwapPoolHandlerBase<Map<IArena, Long>> 
                 .getMaximumInterval();
 
         this.task = Bukkit.getScheduler().runTaskTimer(this.getPlugin(), () -> {
-                    for (final Map.Entry<IArena, Long> entry : getArenas().entrySet()) {
-                        final IArena arena = entry.getKey();
-                        final Long lastSwap = entry.getValue();
+            for (final Map.Entry<IArena, Long> entry : getArenas().entrySet()) {
+                final IArena arena = entry.getKey();
+                final Long lastSwap = entry.getValue();
 
-                        if (arena.getStatus() != GameState.playing) {
-                            this.arenaMap.remove(arena);
-                            continue;
-                        }
+                if (arena.getStatus() != GameState.playing) {
+                    this.arenaMap.remove(arena);
+                    continue;
+                }
 
-                        final long elapsedSeconds = TimeUtil.timeElapsedSeconds(lastSwap);
-                        final long randomizedInterval = ThreadLocalRandom.current()
-                                .nextInt(this.minimumInterval, this.maximumInterval);
+                final long elapsedSeconds = TimeUtil.timeElapsedSeconds(lastSwap);
+                final long randomizedInterval = ThreadLocalRandom.current()
+                        .nextInt(this.minimumInterval, this.maximumInterval);
 
-                        LogHandler.get()
-                                .debug(String.format(FOUND_ARENA_DEBUG, arena.getArenaName(), elapsedSeconds,
-                                        randomizedInterval));
+                LogHandler.get()
+                        .debug(String.format(FOUND_ARENA_DEBUG, arena.getArenaName(), elapsedSeconds,
+                                randomizedInterval));
 
-                        final List<ITeam> filteredTeams = arena.getTeams()
-                                .stream()
-                                .filter(team -> team.getSize() != 0)
-                                .collect(Collectors.toList());
+                final List<ITeam> filteredTeams = arena.getTeams()
+                        .stream()
+                        .filter(team -> team.getSize() != 0)
+                        .collect(Collectors.toList());
 
-                        if (filteredTeams.size() < 2) {
-                            LogHandler.get()
-                                    .debug(String.format(LESS_THAN_TWO_TEAMS_DEBUG, arena.getArenaName()));
-                            unregisterArena(arena);
-                            continue;
-                        }
+                if (filteredTeams.size() < 2) {
+                    LogHandler.get()
+                            .debug(String.format(LESS_THAN_TWO_TEAMS_DEBUG, arena.getArenaName()));
+                    unregisterArena(arena);
+                    continue;
+                }
 
-                        this.rejoinProvider.track(arena);
+                this.rejoinProvider.track(arena);
 
-                        if (elapsedSeconds >= randomizedInterval) {
-                            LogHandler.get()
-                                    .debug(String.format(RUNNING_TASK_DEBUG, arena.getArenaName()));
+                if (elapsedSeconds >= randomizedInterval) {
+                    LogHandler.get()
+                            .debug(String.format(RUNNING_TASK_DEBUG, arena.getArenaName()));
 
-                            executeTask(arena);
-                            this.arenaMap.put(arena, System.currentTimeMillis());
-                        }
-                    }
-                }, 80L, 10L);
+                    executeTask(arena);
+                    this.arenaMap.put(arena, System.currentTimeMillis());
+                }
+            }
+        }, 80L, 10L);
     }
 
     public void executeTask(final IArena arena) {

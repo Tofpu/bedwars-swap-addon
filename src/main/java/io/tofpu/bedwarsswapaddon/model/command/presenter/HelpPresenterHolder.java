@@ -6,24 +6,23 @@ import io.tofpu.messagepresenter.MessagePresenterHolderImpl;
 import io.tofpu.messagepresenter.extra.MessagePairPresenter;
 import io.tofpu.messagepresenter.extra.MessageTreePresenter;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
-import revxrsal.commands.annotation.Description;
-import revxrsal.commands.annotation.Flag;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Subcommand;
-import revxrsal.commands.annotation.Usage;
+import revxrsal.commands.annotation.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 public class HelpPresenterHolder {
-    private static HelpPresenterHolder instance;
     private static final String TITLE = "<white><bold>%s</bold>";
     private static final String KEY_STYLE = "<yellow>%s";
     private static final String VALUE_STYLE = "<white>%s";
     private static final String COMMAND_STYLE = "<yellow>/swap %s %s<dark_gray>- <white>%s";
+    private static HelpPresenterHolder instance;
+    private String result = "";
+
+    private HelpPresenterHolder() {
+        // prevent instantiation
+    }
 
     public static void generatePresenter(final PluginDescriptionFile description) {
         instance = new HelpPresenterHolder();
@@ -34,10 +33,47 @@ public class HelpPresenterHolder {
         return instance;
     }
 
-    private String result = "";
+    private static String generateUsageOfMethod(final Subcommand subcommand,
+                                                final Method method) {
+        final StringBuilder builder = new StringBuilder();
 
-    private HelpPresenterHolder() {
-        // prevent instantiation
+        if (method.isAnnotationPresent(Usage.class)) {
+            return method.getAnnotation(Usage.class).value().replace(subcommand.value()[0] + " ", "") + " ";
+        }
+
+        for (final Parameter parameter : method.getParameters()) {
+            if (CommandSender.class.isAssignableFrom(parameter.getType())) {
+                continue;
+            }
+
+            if (builder.length() != 0) {
+                builder.append(" ");
+            }
+
+            final String name;
+            switch (parameter.getType().getSimpleName()) {
+                // add more types here
+                default:
+                    name = parameter.getName();
+            }
+
+            String startingTag = "<";
+            String closingTag = ">";
+            if (parameter.isAnnotationPresent(Optional.class)) {
+                startingTag = "[";
+                closingTag = "]";
+            }
+
+            String flag = "";
+            if (parameter.isAnnotationPresent(Flag.class)) {
+                final Flag flagAnnotation = parameter.getAnnotation(Flag.class);
+                flag = "-" + flagAnnotation.value() + " ";
+            }
+
+            builder.append(startingTag).append(flag).append(name).append(closingTag).append(" ");
+        }
+
+        return builder.toString();
     }
 
     private void generate(final PluginDescriptionFile description) {
@@ -80,49 +116,6 @@ public class HelpPresenterHolder {
         });
 
         this.result = holder.getResult();
-    }
-
-    private static String generateUsageOfMethod(final Subcommand subcommand,
-            final Method method) {
-        final StringBuilder builder = new StringBuilder();
-
-        if (method.isAnnotationPresent(Usage.class)) {
-            return method.getAnnotation(Usage.class).value().replace(subcommand.value()[0] + " ", "") + " ";
-        }
-
-        for (final Parameter parameter : method.getParameters()) {
-            if (CommandSender.class.isAssignableFrom(parameter.getType())) {
-                continue;
-            }
-
-            if (builder.length() != 0) {
-                builder.append(" ");
-            }
-
-            final String name;
-            switch (parameter.getType().getSimpleName()) {
-                // add more types here
-                default:
-                    name = parameter.getName();
-            }
-
-            String startingTag = "<";
-            String closingTag = ">";
-            if (parameter.isAnnotationPresent(Optional.class)) {
-                startingTag = "[";
-                closingTag = "]";
-            }
-
-            String flag = "";
-            if (parameter.isAnnotationPresent(Flag.class)) {
-                final Flag flagAnnotation = parameter.getAnnotation(Flag.class);
-                flag = "-" + flagAnnotation.value() + " ";
-            }
-
-            builder.append(startingTag).append(flag).append(name).append(closingTag).append(" ");
-        }
-
-        return builder.toString();
     }
 
     public String result() {
