@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.cryptomorin.xseries.messages.Titles;
 import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
-import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextDecoration;

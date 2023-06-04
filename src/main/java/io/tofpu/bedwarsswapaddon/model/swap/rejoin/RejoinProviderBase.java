@@ -4,7 +4,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.Arena;
 import io.tofpu.bedwarsswapaddon.wrapper.RejoinArenaWrapper;
-import io.tofpu.bedwarsswapaddon.wrapper.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
