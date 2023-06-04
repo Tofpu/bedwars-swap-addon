@@ -1,6 +1,5 @@
 package io.tofpu.bedwarsswapaddon.model.configuration;
 
-import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
 import io.tofpu.bedwarsswapaddon.model.configuration.section.GeneralSection;
 import io.tofpu.bedwarsswapaddon.model.configuration.section.SwapAnnounceSection;
 import org.apache.commons.lang.builder.EqualsBuilder;

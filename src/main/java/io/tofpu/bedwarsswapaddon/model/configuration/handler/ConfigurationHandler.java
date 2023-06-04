@@ -23,7 +23,8 @@ public class ConfigurationHandler {
     private ConfigurationLoader<?> loader;
     private ConfigurationNode node;
 
-    private ConfigurationHandler() {}
+    private ConfigurationHandler() {
+    }
 
     public static ConfigurationHandler get() {
         return INSTANCE;

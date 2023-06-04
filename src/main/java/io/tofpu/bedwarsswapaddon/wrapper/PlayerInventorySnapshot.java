@@ -18,10 +18,6 @@ public class PlayerInventorySnapshot implements PlayerInventory {
     private final ItemStack[] contents;
     private final ItemStack[] armorContents;
 
-    public static PlayerInventorySnapshot of(final HumanEntity entity) {
-        return new PlayerInventorySnapshot(entity.getInventory());
-    }
-
     private PlayerInventorySnapshot(final PlayerInventory inventory) {
         this.inventory = inventory;
         this.contents = inventory.getContents();
@@ -30,9 +26,19 @@ public class PlayerInventorySnapshot implements PlayerInventory {
         this.item = new ItemStack(inventory.getItemInHand());
     }
 
+    public static PlayerInventorySnapshot of(final HumanEntity entity) {
+        return new PlayerInventorySnapshot(entity.getInventory());
+    }
+
     @Override
     public ItemStack[] getArmorContents() {
         return this.armorContents;
+    }
+
+    @Override
+    public void setArmorContents(final ItemStack[] items) {
+        throw new IllegalStateException("Cannot set armor contents of a snapshot " +
+                                        "inventory");
     }
 
     @Override
@@ -41,8 +47,18 @@ public class PlayerInventorySnapshot implements PlayerInventory {
     }
 
     @Override
+    public void setHelmet(final ItemStack helmet) {
+        throw new IllegalStateException("Cannot set helmet of a snapshot inventory");
+    }
+
+    @Override
     public ItemStack getChestplate() {
         return null;
+    }
+
+    @Override
+    public void setChestplate(final ItemStack chestplate) {
+        throw new IllegalStateException("Cannot set chestplate of a snapshot inventory");
     }
 
     @Override
@@ -51,8 +67,18 @@ public class PlayerInventorySnapshot implements PlayerInventory {
     }
 
     @Override
+    public void setLeggings(final ItemStack leggings) {
+        throw new IllegalStateException("Cannot set leggings of a snapshot inventory");
+    }
+
+    @Override
     public ItemStack getBoots() {
         return null;
+    }
+
+    @Override
+    public void setBoots(final ItemStack boots) {
+        throw new IllegalStateException("Cannot set boots of a snapshot inventory");
     }
 
     @Override
@@ -213,32 +239,6 @@ public class PlayerInventorySnapshot implements PlayerInventory {
     @Override
     public InventoryType getType() {
         return null;
-    }
-
-    @Override
-    public void setArmorContents(final ItemStack[] items) {
-        throw new IllegalStateException("Cannot set armor contents of a snapshot " +
-                                        "inventory");
-    }
-
-    @Override
-    public void setHelmet(final ItemStack helmet) {
-        throw new IllegalStateException("Cannot set helmet of a snapshot inventory");
-    }
-
-    @Override
-    public void setChestplate(final ItemStack chestplate) {
-        throw new IllegalStateException("Cannot set chestplate of a snapshot inventory");
-    }
-
-    @Override
-    public void setLeggings(final ItemStack leggings) {
-        throw new IllegalStateException("Cannot set leggings of a snapshot inventory");
-    }
-
-    @Override
-    public void setBoots(final ItemStack boots) {
-        throw new IllegalStateException("Cannot set boots of a snapshot inventory");
     }
 
     @Override

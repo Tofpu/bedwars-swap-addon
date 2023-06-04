@@ -7,16 +7,13 @@ import io.tofpu.bedwarsswapaddon.wrapper.RejoinArenaWrapper;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class RejoinProviderBase {
     public abstract void track(final IArena arena);
+
     public abstract void untrack(final IArena arena);
+
     public abstract ArenaTracker get(final IArena arena);
 
     public abstract void rejoin(final RejoinContext context);

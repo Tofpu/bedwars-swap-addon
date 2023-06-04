@@ -9,6 +9,11 @@ import org.bukkit.plugin.Plugin;
 
 public class AdventureHolder {
     private static AdventureHolder instance;
+    private final BukkitAudiences adventure;
+
+    public AdventureHolder(final BukkitAudiences adventure) {
+        this.adventure = adventure;
+    }
 
     public static AdventureHolder get() {
         if (instance == null) {
@@ -19,12 +24,6 @@ public class AdventureHolder {
 
     public static void init(final Plugin plugin) {
         instance = new AdventureHolder(BukkitAudiences.create(plugin));
-    }
-
-    private final BukkitAudiences adventure;
-
-    public AdventureHolder(final BukkitAudiences adventure) {
-        this.adventure = adventure;
     }
 
     public void message(final CommandSender player, final String message) {

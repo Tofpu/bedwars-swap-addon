@@ -2,7 +2,6 @@ package io.tofpu.bedwarsswapaddon.wrapper;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -13,14 +12,14 @@ public class PlayerSnapshot {
     private final Vector velocity;
 
 
-    public static PlayerSnapshot of(Player player) {
-        return new PlayerSnapshot(player);
-    }
-
     private PlayerSnapshot(final Player player) {
         this.player = player;
         this.location = player.getLocation();
         this.velocity = player.getVelocity().clone();
+    }
+
+    public static PlayerSnapshot of(Player player) {
+        return new PlayerSnapshot(player);
     }
 
     public String getName() {

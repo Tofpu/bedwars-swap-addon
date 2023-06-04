@@ -4,12 +4,12 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 public class ImmutableLinkedList<T> extends LinkedList<T> {
-    public static <T> ImmutableLinkedList<T> of(final LinkedList<T> list) {
-        return new ImmutableLinkedList<>(list);
-    }
-
     public ImmutableLinkedList(final LinkedList<T> list) {
         super.addAll(size(), list);
+    }
+
+    public static <T> ImmutableLinkedList<T> of(final LinkedList<T> list) {
+        return new ImmutableLinkedList<>(list);
     }
 
     @Override
