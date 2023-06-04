@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static io.tofpu.bedwarsswapaddon.snapshot.util.BukkitMocker.mockBasicPlayer;
 import static io.tofpu.bedwarsswapaddon.snapshot.util.BukkitMocker.mockServer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -75,7 +75,8 @@ public class BedwarsMocker {
     public static BedWarsTeam bedWarsTeam(TeamColor color, int players, boolean bedDestroyed) {
         final List<Player> playerList = new ArrayList<>();
         for (int i = 0; i < players; i++) {
-            playerList.add(mockBasicPlayer(color + "-" + i));
+            String name = color + "-" + i;
+            playerList.add(mockPlayer(name, mock(Location.class)));
         }
         return bedWarsTeam(color, playerList, bedDestroyed);
     }
@@ -94,7 +95,13 @@ public class BedwarsMocker {
         when(team.getName()).thenReturn(color.name());
         when(team.getColor()).thenReturn(color);
 
-        when(team.isBedDestroyed()).thenReturn(bedDestroyed);
+        final AtomicBoolean bedDestroyedHolder = new AtomicBoolean(bedDestroyed);
+        doAnswer(invocation -> {
+            bedDestroyedHolder.set(invocation.getArgument(0));
+            return null;
+        }).when(team).setBedDestroyed(anyBoolean());
+
+        doAnswer(invocation -> bedDestroyedHolder.get()).when(team).isBedDestroyed();
 
         ConcurrentHashMap<String, Integer> upgradeTiers = new ConcurrentHashMap<>();
         when(team.getTeamUpgradeTiers()).thenReturn(upgradeTiers);
