@@ -48,7 +48,8 @@ public class GameTest extends BedwarsHelper {
         MessageHolder.init();
 
         RejoinProviderBase.ArenaTracker arenaTracker = new RejoinProviderBase.ArenaTracker(arena, teams);
-        game.run(new SwapPoolTaskBase.SwapPoolTaskContext(arena, arenaTracker));
+        SwapPoolTaskBase.SwapPoolTaskContext context = new SwapPoolTaskBase.SwapPoolTaskContext(arena, arenaTracker);
+        game.run(context);
 
         ITeam redTeam = teams.get(0);
         Assertions.assertTrue(redTeam.getMembers().size() != 0);
