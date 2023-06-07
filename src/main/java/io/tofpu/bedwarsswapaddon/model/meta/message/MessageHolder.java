@@ -32,6 +32,11 @@ public class MessageHolder extends io.tofpu.dynamicmessage.holder.MessageHolder 
                 .create(MessageHolder.class);
     }
 
+    public static void clear() {
+//        DynamicMessage.get().unload(MessageHolder.class);
+//        instance = null;
+    }
+
     public static MessageHolder get() {
         return instance;
     }

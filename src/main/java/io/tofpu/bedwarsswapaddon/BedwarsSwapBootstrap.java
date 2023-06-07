@@ -5,7 +5,8 @@ import io.tofpu.bedwarsswapaddon.listener.BedwarsListener;
 import io.tofpu.bedwarsswapaddon.model.command.CommandHandler;
 import io.tofpu.bedwarsswapaddon.model.command.presenter.HelpPresenterHolder;
 import io.tofpu.bedwarsswapaddon.model.configuration.handler.ConfigurationHandler;
-import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
+import io.tofpu.bedwarsswapaddon.model.meta.adventure.BukkitMessageService;
+import io.tofpu.bedwarsswapaddon.model.meta.adventure.MessageServiceHolder;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.meta.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.model.reload.MainReloadHandler;
@@ -76,7 +77,7 @@ public class BedwarsSwapBootstrap {
         }
 
         LogHandler.get().log("Hooking into adventure...");
-        AdventureHolder.init(javaPlugin);
+        MessageServiceHolder.init(new BukkitMessageService(javaPlugin));
 
         LogHandler.get().log("Initializing the commands...");
         CommandHandler.init(javaPlugin, reloadHandler);
@@ -117,7 +118,7 @@ public class BedwarsSwapBootstrap {
     public void onDisable() {
         LogHandler.get().log("Unhooking from adventure...");
         try {
-            AdventureHolder.get().close();
+            MessageServiceHolder.get().close();
         } catch (Exception e) {
             // ignore
         }

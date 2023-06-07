@@ -1,8 +1,9 @@
 package io.tofpu.bedwarsswapaddon.util;
 
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.cryptomorin.xseries.messages.Titles;
-import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
+import io.tofpu.bedwarsswapaddon.model.meta.adventure.MessageServiceHolder;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
@@ -17,9 +18,9 @@ import java.util.List;
 public class TeamUtil {
     public static void broadcastMessageTo(final String message, final TeamSnapshot... teams) {
         for (final TeamSnapshot team : teams) {
-            for (final Player player : team.getCachedMembers()) {
+            for (final Player player : team.getMemberPlayers()) {
                 try {
-                    AdventureHolder.get()
+                    MessageServiceHolder.get()
                             .message(player, message);
                 } catch (IllegalStateException exception) {
                     player.sendMessage(message);
@@ -28,13 +29,13 @@ public class TeamUtil {
         }
     }
 
-    public static void broadcastTitleTo(final String message, final TeamSnapshot... teams) {
+    public static void broadcastTitleTo(final String message, final ITeam... teams) {
         final String[] split = getSplit(message);
         final String title = split.length > 0 ? split[0] : message;
         final String subtitle = split.length > 1 ? split[1] : "";
 
-        for (final TeamSnapshot team : teams) {
-            for (final Player player : team.getCachedMembers()) {
+        for (final ITeam team : teams) {
+            for (final Player player : team.getMembersCache()) {
                 sendTitle(title, subtitle, player);
             }
         }

@@ -6,6 +6,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import io.tofpu.bedwarsswapaddon.snapshot.helper.BedwarsHelper;
 import io.tofpu.bedwarsswapaddon.snapshot.util.ArenaSpectator;
+import io.tofpu.bedwarsswapaddon.wrapper.LiveObject;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
@@ -20,7 +21,7 @@ import static io.tofpu.bedwarsswapaddon.snapshot.util.BedwarsMocker.bedWarsTeam;
 import static io.tofpu.bedwarsswapaddon.snapshot.util.BedwarsMocker.mockPlayer;
 import static org.mockito.Mockito.*;
 
-public class NewSwapTest extends BedwarsHelper {
+public class SnapshotTest extends BedwarsHelper {
 
     public static final TeamEnchant TEAM_ENCHANT = new TeamEnchant() {
         @Override
@@ -49,20 +50,20 @@ public class NewSwapTest extends BedwarsHelper {
         Player redPlayer = mockPlayer("red", at(5, 5, 5));
         ITeam redTeam = bedWarsTeam(TeamColor.RED, players(redPlayer), false);
         TeamSnapshot redSnapshot = snapshot(redTeam);
-        LiveObject red = live(redTeam);
+        LiveObject<ITeam> red = live(redSnapshot);
 
         Player bluePlayer = mockPlayer("blue", at(10, 10, 10));
         ITeam blueTeam = bedWarsTeam(TeamColor.BLUE, players(bluePlayer), false);
         TeamSnapshot blueSnapshot = snapshot(blueTeam);
-        LiveObject blue = live(blueTeam);
+        LiveObject<ITeam> blue = live(blueSnapshot);
 
         // red snapshot is applied to blue team
         blue.use(redSnapshot);
-        verify(bluePlayer, times(1)).teleport(eq(at(5, 5, 5)));
+        verify(redPlayer, times(1)).teleport(eq(at(10, 10, 10)));
 
         // blue snapshot is applied to red team
         red.use(blueSnapshot);
-        verify(redPlayer, times(1)).teleport(eq(at(10, 10, 10)));
+        verify(bluePlayer, times(1)).teleport(eq(at(5, 5, 5)));
     }
 
     @Test
@@ -73,7 +74,7 @@ public class NewSwapTest extends BedwarsHelper {
 
         Player bluePlayer = mockPlayer("blue", at(10, 10, 10));
         ITeam blueTeam = bedWarsTeam(TeamColor.BLUE, players(bluePlayer), false);
-        LiveObject blue = live(blueTeam);
+        LiveObject<ITeam> blue = live(snapshot(blueTeam));
 
         // red snapshot is applied to blue team
         blue.use(redSnapshot);
@@ -87,11 +88,11 @@ public class NewSwapTest extends BedwarsHelper {
     @Test
     void safe_player_teleport_test() {
         Player redPlayer = mockPlayer("red", at(5, 5, 5));
-        LiveObject redTeam = live(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2)));
+        LiveObject<ITeam> redTeam = live(snapshot(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2))));
         TeamSnapshot redSnapshot = snapshot(redTeam.object());
 
         Player bluePlayer = mockPlayer("blue", at(10, 10, 10));
-        LiveObject blue = live(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1)));
+        LiveObject<ITeam> blue = live(snapshot(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1))));
 
         ArenaSpectator.add(bluePlayer);
         blue.use(redSnapshot); // blue -> red
@@ -102,11 +103,11 @@ public class NewSwapTest extends BedwarsHelper {
     @Test
     void unsafe_player_teleport_test() {
         Player redPlayer = mockPlayer("red", at(5, 5, 5));
-        LiveObject redTeam = live(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2)));
+        LiveObject<ITeam> redTeam = live(snapshot(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2))));
         TeamSnapshot redSnapshot = snapshot(redTeam.object());
 
         Player bluePlayer = mockPlayer("blue", at(10, 10, 10));
-        LiveObject blue = live(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1)));
+        LiveObject<ITeam> blue = live(snapshot(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1))));
 
         ArenaSpectator.add(bluePlayer);
         blue.use(redSnapshot); // blue -> red
@@ -117,45 +118,43 @@ public class NewSwapTest extends BedwarsHelper {
     @Test
     void safe_target_teleport_test() {
         Player redPlayer = mockPlayer("red", at(5, 5, 5));
-        LiveObject redTeam = live(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2)));
+        LiveObject<ITeam> redTeam = live(snapshot(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2))));
         TeamSnapshot redSnapshot = snapshot(redTeam.object());
 
         Player bluePlayer = mockPlayer("blue", at(10, 10, 10));
-        LiveObject blue = live(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1)));
+        LiveObject<ITeam> blue = live(snapshot(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1))));
 
         blue.use(redSnapshot); // blue -> red
 
-        verify(bluePlayer, times(1)).teleport(eq(at(5, 5, 5)));
+        verify(redPlayer, times(1)).teleport(eq(at(10, 10, 10)));
     }
 
     @Test
     void unsafe_target_teleport_test() {
         Player redPlayer = mockPlayer("red", at(5, 5, 5));
-        LiveObject redTeam = live(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2)));
+        LiveObject<ITeam> redTeam = live(snapshot(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2))));
         TeamSnapshot redSnapshot = snapshot(redTeam.object());
 
         Player bluePlayer = mockPlayer("blue", at(10, 10, 10));
-        LiveObject blue = live(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1)));
+        LiveObject<ITeam> blue = live(snapshot(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1))));
 
-        ArenaSpectator.add(redPlayer);
+        ArenaSpectator.add(bluePlayer);
         blue.use(redSnapshot); // blue -> red
 
-        verify(bluePlayer, times(1)).teleport(eq(at(2, 2, 2)));
+        verify(redPlayer, times(1)).teleport(eq(at(1, 1, 1)));
     }
 
     @Test
     void no_target_teleport_test() {
         Player redPlayer = mockPlayer("red", at(5, 5, 5));
-        LiveObject redTeam = live(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2)));
+        LiveObject<ITeam> redTeam = live(snapshot(bedWarsTeam(TeamColor.RED, players(redPlayer), at(2, 2, 2))));
         TeamSnapshot redSnapshot = snapshot(redTeam.object());
 
-        Player bluePlayer = mockPlayer("blue", at(10, 10, 10));
-        LiveObject blue = live(bedWarsTeam(TeamColor.BLUE, players(bluePlayer), at(1, 1, 1)));
+        LiveObject<ITeam> blue = live(snapshot(bedWarsTeam(TeamColor.BLUE, 0, at(1, 1, 1))));
 
-        ArenaSpectator.add(redPlayer);
         blue.use(redSnapshot); // blue -> red
 
-        verify(bluePlayer, times(1)).teleport(eq(at(2, 2, 2)));
+        verify(redPlayer, times(1)).teleport(eq(at(1, 1, 1)));
     }
 
     @Test
@@ -173,7 +172,7 @@ public class NewSwapTest extends BedwarsHelper {
         BedWarsTeam blueTeam = bedWarsTeam(TeamColor.BLUE, players(), false);
 
         // red snapshot is applied to blue team
-        redSnapshot.apply(blueTeam);
+        redSnapshot.to(snapshot(blueTeam), blueTeam);
 
         Assertions.assertEquals(1, blueTeam.getTeamUpgradeTiers().get("test"));
         Assertions.assertEquals(potionEffect(PotionEffectType.HEAL), blueTeam.getTeamEffects().get(0));
@@ -196,11 +195,11 @@ public class NewSwapTest extends BedwarsHelper {
 
     @Test
     void bed_snapshot_test() {
-        LiveObject redTeam = live(bedWarsTeam(TeamColor.RED, 1, false));
+        LiveObject<ITeam> redTeam = live(snapshot(bedWarsTeam(TeamColor.RED, 1, false)));
         TeamSnapshot redSnapshot = snapshot(redTeam.object());
 
         BedWarsTeam blueTeam = bedWarsTeam(TeamColor.BLUE, 1, true);
-        LiveObject blue = live(blueTeam);
+        LiveObject<ITeam> blue = live(snapshot(blueTeam));
 
         Assertions.assertTrue(blueTeam.isBedDestroyed());
         blue.use(redSnapshot); // blue -> red
