@@ -61,22 +61,22 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             TeamSnapshot currentTeamSnapshot = entry.getKey();
             LiveObject<ITeam> current = TeamWrapper.of(currentTeamSnapshot, currentTeamSnapshot.getLive());
             ITeam currentTeam = current.object();
-            TeamSnapshot nextTeam = entry.getValue();
+            TeamSnapshot nextSnapshot = entry.getValue();
 
-            System.out.println("Teleporting " + nextTeam.getColor() + " to " + currentTeam.getColor());
+            System.out.println("Teleporting " + nextSnapshot.getColor() + " to " + currentTeam.getColor());
 
             final MessageHolder messageHolder = MessageHolder.get();
             TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace(
-                    "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextTeam);
+                    "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextSnapshot);
 
             TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
-                    "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextTeam.getLive());
+                    "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextSnapshot.getLive());
 //            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
 //                    "%team%", TeamUtil.teamOf(target.getColor())), currentTeam);
 
-            context.getArenaTracker().swapTeams(currentTeamSnapshot, nextTeam.getLive());
+            context.getArenaTracker().swapTeams(currentTeamSnapshot, nextSnapshot.getLive());
 
-            current.use(nextTeam);
+            current.use(nextSnapshot);
 //            nextTeam.use(currentTeam);
 //            snapshot.use(target);
 //            team.apply(target.getLive());

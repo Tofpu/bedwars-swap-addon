@@ -5,9 +5,13 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.arena.Arena;
 import io.tofpu.bedwarsswapaddon.wrapper.RejoinArenaWrapper;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static io.tofpu.bedwarsswapaddon.util.ProgramCorrectnessUtil.requireState;
 
 public abstract class RejoinProviderBase {
     public abstract void track(final IArena arena);
@@ -79,36 +83,44 @@ public abstract class RejoinProviderBase {
         }
 
         public void swapTeams(final TeamSnapshot from, final ITeam to) {
+            requireState(!from.getColor().equals(to.getColor()), "Cannot swap teams with same color");
             for (final TeamTracker teamTracker : this.teamTrackers) {
-                // from players to go
-                for (final Player player : from.getCachedMembers()) {
-                    if (teamTracker.isInTeam(player)) {
-                        teamTracker.setCurrentTeam(to);
-                    }
+                // from -> to
+//                for (final Player player : from.getCachedMembers()) {
+//                    if (teamTracker.isInTeam(player)) {
+//                        System.out.println("Found team: " + teamTracker.getCurrentTeam().getColor());
+//                        teamTracker.setCurrentTeam(to);
+//                        return;
+//                    }
+//                }
+
+                if (!teamTracker.getCurrentTeam().getColor().equals(from.getColor())) {
+                    continue;
                 }
 
+                teamTracker.setPlayers(to.getMembersCache());
+                return;
+
                 // to players to from
-                for (final Player player : to.getMembersCache()) {
-                    if (teamTracker.isInTeam(player)) {
-                        teamTracker.setCurrentTeam(from.getLive());
-                    }
-                }
+//                for (final Player player : to.getMembersCache()) {
+//                    if (teamTracker.isInTeam(player)) {
+//                        teamTracker.setCurrentTeam(from.getLive());
+//                    }
+//                }
             }
         }
 
         public class TeamTracker {
-            private final Map<UUID, UUID> playerMap;
+            private final List<UUID> players;
             private ITeam currentTeam;
 
             public TeamTracker(final List<Player> players, final ITeam currentTeam) {
-                this.playerMap = new HashMap<>();
+                this.players = players.stream().map(Entity::getUniqueId).collect(Collectors.toList());
                 this.currentTeam = currentTeam;
-
-                players.forEach(player -> this.playerMap.put(player.getUniqueId(), player.getUniqueId()));
             }
 
             public boolean isInTeam(final Player player) {
-                return this.playerMap.containsKey(player.getUniqueId());
+                return this.players.contains(player.getUniqueId());
             }
 
             public ITeam getCurrentTeam() {
@@ -121,6 +133,14 @@ public abstract class RejoinProviderBase {
 
             public void rejoin(final Player player) {
                 new RejoinArenaWrapper((Arena) this.currentTeam.getArena()).rejoin(player, currentTeam);
+            }
+
+            public void setPlayers(List<Player> newPlayerList) {
+                List<UUID> uuidList = newPlayerList.stream().map(Entity::getUniqueId).collect(Collectors.toList());
+                this.players.clear();
+
+                System.out.println(this.currentTeam.getColor() + ": previous: " + this.players + " and now: " + uuidList);
+                this.players.addAll(uuidList);
             }
         }
     }
