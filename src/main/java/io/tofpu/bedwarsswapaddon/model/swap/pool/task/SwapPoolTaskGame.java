@@ -70,7 +70,7 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
                     "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextSnapshot);
 
             TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
-                    "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextSnapshot.getLive());
+                    "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextSnapshot);
 //            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
 //                    "%team%", TeamUtil.teamOf(target.getColor())), currentTeam);
 
