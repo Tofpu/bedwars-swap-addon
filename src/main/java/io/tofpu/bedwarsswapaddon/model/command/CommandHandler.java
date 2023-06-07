@@ -1,6 +1,6 @@
 package io.tofpu.bedwarsswapaddon.model.command;
 
-import io.tofpu.bedwarsswapaddon.model.meta.adventure.AdventureHolder;
+import io.tofpu.bedwarsswapaddon.model.meta.adventure.MessageServiceHolder;
 import io.tofpu.bedwarsswapaddon.model.reload.ReloadHandlerBase;
 import org.bukkit.plugin.Plugin;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
@@ -24,7 +24,7 @@ public class CommandHandler extends CommandHandlerBase {
 
             final BukkitActor bukkitActor = (BukkitActor) actor;
 
-            AdventureHolder.get()
+            MessageServiceHolder.get()
                     .message(bukkitActor.getSender(), response);
         });
 

@@ -7,6 +7,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,11 +18,13 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.mockito.invocation.InvocationOnMock;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -51,6 +54,14 @@ public class BedwarsMocker {
         return player;
     }
 
+    public static ITeam bedWarsTeam(TeamColor teamColor, int players, Location at) {
+        BedWarsTeam bedWarsTeam = bedWarsTeam(teamColor, players, false);
+
+        doReturn(at).when(bedWarsTeam).getSpawn();
+
+        return bedWarsTeam;
+    }
+
     public static ITeam bedWarsTeam(TeamColor teamColor, List<Player> players, Location at) {
         BedWarsTeam bedWarsTeam = bedWarsTeam(teamColor, players, false);
 
@@ -63,11 +74,11 @@ public class BedwarsMocker {
     public static BedWarsTeam bedWarsTeam(TeamColor color, List<Player> playerList, boolean bedDestroyed) {
         final BedWarsTeam team = bedWarsTeam(color, bedDestroyed);
 
-        when(team.getMembers()).thenReturn(new ArrayList<>());
-        team.getMembers().addAll(playerList);
+        when(team.getMembers()).thenReturn(playerList);
+//        team.getMembers().addAll(playerList);
 
-        when(team.getMembersCache()).thenReturn(new ArrayList<>());
-        team.getMembersCache().addAll(playerList);
+        when(team.getMembersCache()).thenReturn(playerList);
+//        team.getMembersCache().addAll(playerList);
         return team;
     }
 
@@ -126,6 +137,14 @@ public class BedwarsMocker {
         return team;
     }
 
+    public static Arena mockArena(List<ITeam> teams) throws NoSuchFieldException, IllegalAccessException {
+        Arena arena = mockArena();
+
+        doReturn(teams).when(arena).getTeams();
+
+        return arena;
+    }
+
     public static Arena mockArena() throws NoSuchFieldException, IllegalAccessException {
         Server server = mockServer();
 
@@ -140,17 +159,35 @@ public class BedwarsMocker {
 
         Arena mock = mock(Arena.class);
 
+        doReturn(UUID.randomUUID().toString()).when(mock).getArenaName();
+        doReturn(new ArrayList<>()).when(mock).getRegionsList();
+
+        ArenaConfig arenaConfig = mock(ArenaConfig.class);
+        doReturn(arenaConfig).when(mock).getConfig();
+
         doAnswer(invocation -> {
             Player target = invocation.getArgument(0);
             if (target == null) return false;
-            for (Player player : ArenaSpectator.list()) {
-                if (target.getUniqueId().equals(player.getUniqueId())) {
-                    return true;
-                }
-            }
-            return false;
+            return isSpectator(target.getUniqueId());
         }).when(mock).isSpectator(any(Player.class));
 
+        doAnswer(invocation -> {
+            UUID target = invocation.getArgument(0);
+            if (target == null) return false;
+            return isSpectator(target);
+        }).when(mock).isSpectator(any(UUID.class));
+
+
         return mock;
+    }
+
+    @NotNull
+    private static Object isSpectator(UUID targetId) {
+        for (Player spectator : ArenaSpectator.list()) {
+            if (targetId.equals(spectator.getUniqueId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -4,6 +4,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import io.tofpu.bedwarsswapaddon.wrapper.PlayerSnapshot;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -67,15 +68,15 @@ public class TeamSnapshot implements Snapshot {
     }
 
     @Override
-    public void apply(final ITeam team) {
-        team.setBedDestroyed(this.isBedDestroyed());
+    public void to(final TeamSnapshot read, final ITeam write) {
+        write.setBedDestroyed(this.isBedDestroyed());
 
-        upgrade.apply(team);
-        effect.apply(team);
-        member.apply(team);
+        upgrade.to(read, write);
+        effect.to(read, write);
+        member.to(read, write);
 
-        updateCloth(team);
-        updateScoreboard(team);
+        updateCloth(write);
+        updateScoreboard(write);
     }
 
     private void updateCloth(ITeam team) {
@@ -116,5 +117,13 @@ public class TeamSnapshot implements Snapshot {
 
     public List<Player> getCachedMembers() {
         return this.member.getCachedMembers();
+    }
+
+    public List<PlayerSnapshot> getSnapshotMembers() {
+        return this.member.getSnapshotMembers();
+    }
+
+    public List<Player> getMemberPlayers() {
+        return this.member.getMemberPlayers();
     }
 }

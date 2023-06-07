@@ -16,12 +16,11 @@ public class TeamEffectSnapshot implements Snapshot {
         this.teamEffects = new ArrayList<>(((BedWarsTeam) team).getTeamEffects());
     }
 
-    @Override
-    public void apply(ITeam team) {
-        team.getBaseEffects().clear();
-        team.getBaseEffects().addAll(baseEffects);
+    public void to(TeamSnapshot read, ITeam write) {
+        write.getBaseEffects().clear();
+        write.getBaseEffects().addAll(baseEffects);
 
-        ((BedWarsTeam) team).getTeamEffects().clear();
-        ((BedWarsTeam) team).getTeamEffects().addAll(teamEffects);
+        ((BedWarsTeam) write).getTeamEffects().clear();
+        ((BedWarsTeam) write).getTeamEffects().addAll(teamEffects);
     }
 }

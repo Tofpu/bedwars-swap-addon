@@ -2,6 +2,7 @@ package io.tofpu.bedwarsswapaddon.snapshot.util;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -22,6 +23,15 @@ public class BukkitMocker {
     public static Server mockServer() {
         Server mock = mock(ServerTest.class);
         doReturn(Logger.getGlobal()).when(mock).getLogger();
+        return mock;
+    }
+
+    public static Plugin mockPluginWithLogger() {
+        Plugin mock = mock(Plugin.class);
+
+        Server server = mockServer();
+        doReturn(server.getLogger()).when(mock).getLogger();
+
         return mock;
     }
 

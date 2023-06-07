@@ -45,20 +45,20 @@ public class TeamUpgradeSnapshot {
         return activeTraps;
     }
 
-    public void apply(ITeam team) {
-        team.getTeamUpgradeTiers().clear();
-        team.getTeamUpgradeTiers().putAll(this.teamUpgrade);
+    public void to(TeamSnapshot read, ITeam write) {
+        write.getTeamUpgradeTiers().clear();
+        write.getTeamUpgradeTiers().putAll(this.teamUpgrade);
 
-        team.getSwordsEnchantments().clear();
-        team.getSwordsEnchantments().addAll(swordEnchantments);
+        write.getSwordsEnchantments().clear();
+        write.getSwordsEnchantments().addAll(swordEnchantments);
 
-        team.getArmorsEnchantments().clear();
-        team.getArmorsEnchantments().addAll(armorEnchantments);
+        write.getArmorsEnchantments().clear();
+        write.getArmorsEnchantments().addAll(armorEnchantments);
 
-        team.getBowsEnchantments().clear();
-        team.getBowsEnchantments().addAll(bowsEnchantments);
+        write.getBowsEnchantments().clear();
+        write.getBowsEnchantments().addAll(bowsEnchantments);
 
-        team.getActiveTraps().clear();
-        team.getActiveTraps().addAll(activeTraps);
+        write.getActiveTraps().clear();
+        write.getActiveTraps().addAll(activeTraps);
     }
 }

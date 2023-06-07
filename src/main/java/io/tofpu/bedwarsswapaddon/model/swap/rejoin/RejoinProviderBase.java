@@ -78,17 +78,17 @@ public abstract class RejoinProviderBase {
             return this.arena;
         }
 
-        public void swapTeams(final TeamSnapshot from, final TeamSnapshot to) {
+        public void swapTeams(final TeamSnapshot from, final ITeam to) {
             for (final TeamTracker teamTracker : this.teamTrackers) {
                 // from players to go
                 for (final Player player : from.getCachedMembers()) {
                     if (teamTracker.isInTeam(player)) {
-                        teamTracker.setCurrentTeam(to.getLive());
+                        teamTracker.setCurrentTeam(to);
                     }
                 }
 
                 // to players to from
-                for (final Player player : to.getCachedMembers()) {
+                for (final Player player : to.getMembersCache()) {
                     if (teamTracker.isInTeam(player)) {
                         teamTracker.setCurrentTeam(from.getLive());
                     }
