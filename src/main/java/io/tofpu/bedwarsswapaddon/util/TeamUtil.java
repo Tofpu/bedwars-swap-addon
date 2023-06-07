@@ -29,13 +29,13 @@ public class TeamUtil {
         }
     }
 
-    public static void broadcastTitleTo(final String message, final ITeam... teams) {
+    public static void broadcastTitleTo(final String message, final TeamSnapshot... teams) {
         final String[] split = getSplit(message);
         final String title = split.length > 0 ? split[0] : message;
         final String subtitle = split.length > 1 ? split[1] : "";
 
-        for (final ITeam team : teams) {
-            for (final Player player : team.getMembersCache()) {
+        for (final TeamSnapshot team : teams) {
+            for (final Player player : team.getCachedMembers()) {
                 sendTitle(title, subtitle, player);
             }
         }
