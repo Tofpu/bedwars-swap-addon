@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.tofpu"
-version = "1.0.3"
+version = "1.1.0-SNAPSHOT"
 
 repositories {
     mavenLocal()
