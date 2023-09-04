@@ -17,15 +17,19 @@ repositories {
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.andrei1058.dev/releases/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://repo.codemc.io/repository/nms/")
 }
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 
-    // depending on the bedwars implementation of the bedwars api
-    compileOnly("com.github.Tofpu.bedwars1058-wrapper:bedwars-plugin:wrapper-SNAPSHOT")
+//    compileOnly("com.github.andrei1058.BedWars1058:BedWars1058:23.3")
+//    compileOnly("com.github.andrei1058.BedWars1058:bedwars-api:23.3")
 
-    compileOnly("com.andrei1058.bedwars:bedwars-api:22.3.4")
+    compileOnly("com.andrei1058.bedwars:bedwars-plugin:23.7-SNAPSHOT")
+    compileOnly("com.andrei1058.bedwars:bedwars-api:23.7-SNAPSHOT")
+
+//    compileOnly("com.andrei1058.bedwars:bedwars-api:22.3.4")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
 
     implementation("com.github.tofpu:dynamic-message:1.0.6")
@@ -46,7 +50,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testImplementation("com.github.mockbukkit:MockBukkit:v1.16-SNAPSHOT")
     testImplementation("org.mockito:mockito-core:3.+")
-    testImplementation("com.github.Tofpu.bedwars1058-wrapper:bedwars-plugin:wrapper-SNAPSHOT")
+
+//    testImplementation("com.github.andrei1058.BedWars1058:BedWars1058:23.3")
+    testImplementation("com.andrei1058.bedwars:bedwars-api:23.7-SNAPSHOT")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
@@ -64,7 +70,7 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 
