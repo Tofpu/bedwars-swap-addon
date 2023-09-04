@@ -3,7 +3,8 @@ package io.tofpu.bedwarsswapaddon.wrapper.snapshot;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.api.sidebar.ISidebar;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import io.tofpu.bedwarsswapaddon.wrapper.PlayerSnapshot;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.bukkit.Color;
@@ -33,18 +34,23 @@ public class TeamSnapshot implements Snapshot {
         this.isDestroyed = team.isBedDestroyed();
     }
 
-    private static void updateScoreboard(ITeam team) {
-        for (Player player : team.getMembers()) {
-            final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
-                    .get(player.getUniqueId());
-
-            if (scoreboard == null) {
-                continue;
-            }
-
-            scoreboard.handlePlayerList();
-        }
-    }
+//    private static void updateScoreboard(ITeam team) {
+//        for (Player player : team.getMembers()) {
+////            final BedWarsScoreboard scoreboard = BedWarsScoreboard.getScoreboards()
+////                    .get(player.getUniqueId());
+//
+//            ISidebar sidebar = SidebarService.getInstance().getSidebar(player);
+//
+//            if (sidebar == null) {
+//                continue;
+//            }
+//
+////            scoreboard.handlePlayerList();
+//            sidebar.giveUpdateTabFormat(player, true);
+////            SidebarService.getInstance().giveSidebar();
+//        }
+////        SidebarService.getInstance().refreshTabList();
+//    }
 
     public String getName() {
         return getLive().getName();
@@ -76,7 +82,7 @@ public class TeamSnapshot implements Snapshot {
         member.to(read, write);
 
         updateCloth(write);
-        updateScoreboard(write);
+//        updateScoreboard(write);
     }
 
     private void updateCloth(ITeam team) {

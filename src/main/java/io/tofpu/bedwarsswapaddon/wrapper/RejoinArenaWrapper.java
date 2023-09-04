@@ -9,7 +9,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.shop.ShopCache;
-import com.andrei1058.bedwars.sidebar.BedWarsScoreboard;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -115,6 +115,7 @@ public class RejoinArenaWrapper {
         targetTeam.reJoin(player, BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_COUNTDOWN));
         reJoin.destroy(false);
 
-        BedWarsScoreboard.giveScoreboard(player, arena, true);
+        SidebarService.getInstance().giveSidebar(player, arena, true);
+//        BedWarsScoreboard.giveScoreboard(player, arena, true);
     }
 }

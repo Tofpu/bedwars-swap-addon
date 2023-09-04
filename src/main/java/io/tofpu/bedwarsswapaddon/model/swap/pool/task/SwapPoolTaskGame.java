@@ -2,6 +2,9 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.sidebar.ISidebar;
+import com.andrei1058.bedwars.sidebar.BwSidebar;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.meta.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.util.TeamUtil;
@@ -10,6 +13,8 @@ import io.tofpu.bedwarsswapaddon.wrapper.TeamWrapper;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
@@ -81,5 +86,14 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 //            snapshot.use(target);
 //            team.apply(target.getLive());
         }
+
+        // updates the tab list with the new teams
+        arena.getTeams().forEach(team -> {
+            for (Player player : team.getMembers()) {
+                SidebarService instance = SidebarService.getInstance();
+                instance.remove(player);
+                instance.giveSidebar(player, arena, false);
+            }
+        });
     }
 }
