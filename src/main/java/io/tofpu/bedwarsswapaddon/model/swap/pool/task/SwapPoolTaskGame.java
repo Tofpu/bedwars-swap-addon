@@ -2,8 +2,6 @@ package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.sidebar.ISidebar;
-import com.andrei1058.bedwars.sidebar.BwSidebar;
 import com.andrei1058.bedwars.sidebar.SidebarService;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.meta.message.MessageHolder;
@@ -13,8 +11,6 @@ import io.tofpu.bedwarsswapaddon.wrapper.TeamWrapper;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
@@ -70,14 +66,13 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
             System.out.println("Teleporting " + nextSnapshot.getColor() + " to " + currentTeam.getColor());
 
+            String currentTeamName = currentTeam.getColor().chat() + currentTeam.getName();
             final MessageHolder messageHolder = MessageHolder.get();
             TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace(
-                    "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextSnapshot);
+                    "%team%", currentTeamName), nextSnapshot);
 
             TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
-                    "%team%", TeamUtil.teamOf(currentTeam.getColor())), nextSnapshot);
-//            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
-//                    "%team%", TeamUtil.teamOf(target.getColor())), currentTeam);
+                    "%team%", currentTeamName), nextSnapshot);
 
             context.getArenaTracker().swapTeams(currentTeamSnapshot, nextSnapshot.getLive());
 
