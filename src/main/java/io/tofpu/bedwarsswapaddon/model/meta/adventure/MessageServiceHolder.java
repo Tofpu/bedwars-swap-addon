@@ -1,11 +1,7 @@
 package io.tofpu.bedwarsswapaddon.model.meta.adventure;
 
-import io.tofpu.bedwarsswapaddon.util.ColorUtil;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public class MessageServiceHolder {
     private static MessageServiceHolder instance;
@@ -28,6 +24,10 @@ public class MessageServiceHolder {
 
     public void message(final CommandSender sender, final String message) {
         service.sendMessage(sender, message);
+    }
+
+    public void title(final Player sender, final String title, final String subtitle) {
+        service.sendTitle(sender, title, subtitle);
     }
 
     public void close() {

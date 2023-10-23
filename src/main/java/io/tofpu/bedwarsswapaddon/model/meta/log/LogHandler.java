@@ -5,12 +5,13 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 public class LogHandler {
     private static LogHandler instance;
 
     private Plugin plugin;
-    private ExecutorService executorService;
+    private final ExecutorService executorService;
     private boolean debug;
 
     private LogHandler() {
@@ -51,6 +52,11 @@ public class LogHandler {
         }
 
         log("[DEBUG] " + message);
+    }
+
+    public void warn(final String message, Exception exception) {
+        this.executorService.submit(() -> this.plugin.getLogger()
+                .log(Level.WARNING, message, exception));
     }
 
     public void setPlugin(final Plugin plugin) {

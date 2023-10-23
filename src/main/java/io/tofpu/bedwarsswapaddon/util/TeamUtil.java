@@ -1,8 +1,6 @@
 package io.tofpu.bedwarsswapaddon.util;
 
-import com.cryptomorin.xseries.messages.Titles;
 import io.tofpu.bedwarsswapaddon.model.meta.adventure.MessageServiceHolder;
-import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -43,26 +41,19 @@ public class TeamUtil {
         final String title = split.length > 0 ? split[0] : message;
         final String subtitle = split.length > 1 ? split[1] : "";
 
+
         for (final TeamSnapshot team : teams) {
             for (final Player player : team.getCachedMembers()) {
-                sendTitle(title, subtitle, player);
+                MessageServiceHolder.get().title(player, title, subtitle);
             }
-        }
-    }
-
-    private static void sendTitle(final String title, final String subtitle, final Player player) {
-        try {
-            Titles.sendTitle(player, title, subtitle);
-        } catch (ExceptionInInitializerError | NoClassDefFoundError ignored) {
-            LogHandler.get().debug("Failed to sent title to " + player.getName() + ": " + title + " - " + subtitle);
         }
     }
 
     @NotNull
     private static String[] getSplit(String message) {
         try {
-            Component component = ColorUtil.deserializeMiniMessage(message);
-            message = ColorUtil.serializeToLegacy(component);
+//            Component component = ColorUtil.deserializeMiniMessage(message);
+//            message = ColorUtil.serializeToLegacy(component);
             return message.split("\n");
         } catch (NoClassDefFoundError ignored) {
             return message.split("\n");
