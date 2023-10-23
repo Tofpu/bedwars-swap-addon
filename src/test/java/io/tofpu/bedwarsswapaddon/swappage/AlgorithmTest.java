@@ -1,9 +1,9 @@
 package io.tofpu.bedwarsswapaddon.swappage;
 
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
-import io.tofpu.bedwarsswapaddon.model.swap.pool.task.SwappageAlgorithm;
 import io.tofpu.bedwarsswapaddon.snapshot.helper.BedwarsHelper;
-import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.swap.game.pool.task.SwappageAlgorithm;
+import io.tofpu.bedwarsswapaddon.swap.snapshot.team.TeamSnapshot;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

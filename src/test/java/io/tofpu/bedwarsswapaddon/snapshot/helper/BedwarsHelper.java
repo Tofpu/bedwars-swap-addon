@@ -3,9 +3,9 @@ package io.tofpu.bedwarsswapaddon.snapshot.helper;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import io.tofpu.bedwarsswapaddon.snapshot.util.BedwarsMocker;
-import io.tofpu.bedwarsswapaddon.wrapper.LiveObject;
-import io.tofpu.bedwarsswapaddon.wrapper.TeamWrapper;
-import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.swap.snapshot.team.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.swap.wrapper.LiveObject;
+import io.tofpu.bedwarsswapaddon.swap.wrapper.TeamWrapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

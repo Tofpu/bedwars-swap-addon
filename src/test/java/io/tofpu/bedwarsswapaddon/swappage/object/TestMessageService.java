@@ -1,6 +1,6 @@
 package io.tofpu.bedwarsswapaddon.swappage.object;
 
-import io.tofpu.bedwarsswapaddon.model.meta.adventure.MessageService;
+import io.tofpu.bedwarsswapaddon.message.MessageService;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
