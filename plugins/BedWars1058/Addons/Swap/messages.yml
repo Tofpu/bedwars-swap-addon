@@ -1,6 +1,0 @@
-swapMessageAnnouncement: "<yellow>Your team swapped to </yellow>%team%<yellow>!"
-defaultCommand: "<yellow>This is the default command. Type <hover:show_text:'<yellow>Click to run /swap help'><click:run_command:'/swap help'><gold>/swap help for more info!"
-reload: "<yellow>The plugin has been reloaded!"
-awaitReload: "<yellow>Reloading the plugin..."
-swapTitleAnnouncement: "<yellow><obf>00 </obf></yellow><green>SWAPPAGE </green><yellow><obf>00</obf></yellow>\n<gold>New team</gold>: %team%"
-reloadError: "<red>Something went wrong while reloading the configuration! Check the console for more information."
