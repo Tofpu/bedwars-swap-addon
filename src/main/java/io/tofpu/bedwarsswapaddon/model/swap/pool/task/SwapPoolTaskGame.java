@@ -6,7 +6,6 @@ import com.andrei1058.bedwars.sidebar.SidebarService;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.model.meta.message.MessageHolder;
 import io.tofpu.bedwarsswapaddon.util.TeamUtil;
-import io.tofpu.bedwarsswapaddon.wrapper.LiveObject;
 import io.tofpu.bedwarsswapaddon.wrapper.TeamWrapper;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import org.bukkit.entity.Player;
@@ -37,55 +36,52 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
         final List<TeamSnapshot> filteredTeams = arena.getTeams()
                 .stream()
-                .filter(team -> team.getMembers()
-                                        .size() != 0)
+                // excludes teams that have no members
+                .filter(team -> team.getMembers().size() != 0)
+                // snaps a copy (therefore, snapshot) of the team
                 .map(TeamSnapshot::new)
                 .collect(Collectors.toList());
-
         LogHandler.get()
                 .debug("Filtered teams: " + filteredTeams.stream().map(TeamSnapshot::getName)
                         .collect(Collectors.joining(", ")));
 
+        // determines a list of teams that shall be swapped
         final List<Map.Entry<TeamSnapshot, TeamSnapshot>> swapMap = algorithm.find(filteredTeams)
-                .stream().map(entry -> {
-//                    TeamSnapshot value = entry.getValue();
-//                    LiveObject<ITeam> wrapper = TeamWrapper.of(entry.getKey().getLive());
-                    return new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue());
-                })
+                .stream().map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
-
         LogHandler.get()
                 .debug("selected teams: " + swapMap.stream().map(entry -> entry.getKey().getColor() + " <- " + entry.getValue().getColor())
                         .collect(Collectors.joining(", ")));
 
         for (final Map.Entry<TeamSnapshot, TeamSnapshot> entry : swapMap) {
-            TeamSnapshot currentTeamSnapshot = entry.getKey();
-            LiveObject<ITeam> current = TeamWrapper.of(currentTeamSnapshot, currentTeamSnapshot.getLive());
-            ITeam currentTeam = current.object();
-            TeamSnapshot nextSnapshot = entry.getValue();
+            TeamSnapshot currentSnapshot = entry.getKey();
+            ITeam currentTeam = currentSnapshot.getLive();
+            TeamWrapper currentWrapper = TeamWrapper.of(currentSnapshot, currentSnapshot.getLive());
 
-            System.out.println("Teleporting " + nextSnapshot.getColor() + " to " + currentTeam.getColor());
+            TeamSnapshot swapTarget = entry.getValue();
 
+            LogHandler.get()
+                    .debug("Teleporting " + swapTarget.getColor() + " to " + currentTeam.getColor());
+
+            // notifies members belonging to `next` that they are swapping to `current`
             String currentTeamName = currentTeam.getColor().chat() + currentTeam.getName();
             final MessageHolder messageHolder = MessageHolder.get();
             TeamUtil.broadcastMessageTo(messageHolder.swapMessageAnnouncement.replace(
-                    "%team%", currentTeamName), nextSnapshot);
-
+                    "%team%", currentTeamName), swapTarget);
             TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
-                    "%team%", currentTeamName), nextSnapshot);
+                    "%team%", currentTeamName), swapTarget);
 
-            context.getArenaTracker().swapTeams(currentTeamSnapshot, nextSnapshot.getLive());
-
-            current.use(nextSnapshot);
-//            nextTeam.use(currentTeam);
-//            snapshot.use(target);
-//            team.apply(target.getLive());
+            // applies the snapshot belonging to the team they are swapping to
+            context.getArenaTracker().swapTeams(currentSnapshot, swapTarget.getLive());
+            currentWrapper.use(swapTarget);
         }
+
+        SidebarService instance = SidebarService.getInstance();
+        if (instance == null) return;
 
         // updates the tab list with the new teams
         arena.getTeams().forEach(team -> {
             for (Player player : team.getMembers()) {
-                SidebarService instance = SidebarService.getInstance();
                 instance.remove(player);
                 instance.giveSidebar(player, arena, false);
             }

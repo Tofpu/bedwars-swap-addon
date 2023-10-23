@@ -8,7 +8,10 @@ import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static io.tofpu.bedwarsswapaddon.util.ProgramCorrectnessUtil.requireState;
@@ -85,34 +88,18 @@ public abstract class RejoinProviderBase {
         public void swapTeams(final TeamSnapshot from, final ITeam to) {
             requireState(!from.getColor().equals(to.getColor()), "Cannot swap teams with same color");
             for (final TeamTracker teamTracker : this.teamTrackers) {
-                // from -> to
-//                for (final Player player : from.getCachedMembers()) {
-//                    if (teamTracker.isInTeam(player)) {
-//                        System.out.println("Found team: " + teamTracker.getCurrentTeam().getColor());
-//                        teamTracker.setCurrentTeam(to);
-//                        return;
-//                    }
-//                }
-
                 if (!teamTracker.getCurrentTeam().getColor().equals(from.getColor())) {
                     continue;
                 }
 
                 teamTracker.setPlayers(to.getMembersCache());
                 return;
-
-                // to players to from
-//                for (final Player player : to.getMembersCache()) {
-//                    if (teamTracker.isInTeam(player)) {
-//                        teamTracker.setCurrentTeam(from.getLive());
-//                    }
-//                }
             }
         }
 
-        public class TeamTracker {
+        public static class TeamTracker {
             private final List<UUID> players;
-            private ITeam currentTeam;
+            private final ITeam currentTeam;
 
             public TeamTracker(final List<Player> players, final ITeam currentTeam) {
                 this.players = players.stream().map(Entity::getUniqueId).collect(Collectors.toList());
@@ -125,10 +112,6 @@ public abstract class RejoinProviderBase {
 
             public ITeam getCurrentTeam() {
                 return this.currentTeam;
-            }
-
-            public void setCurrentTeam(final ITeam currentTeam) {
-                this.currentTeam = currentTeam;
             }
 
             public void rejoin(final Player player) {

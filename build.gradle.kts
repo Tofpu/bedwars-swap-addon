@@ -23,13 +23,9 @@ repositories {
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
 
-//    compileOnly("com.github.andrei1058.BedWars1058:BedWars1058:23.3")
-//    compileOnly("com.github.andrei1058.BedWars1058:bedwars-api:23.3")
-
     compileOnly("com.andrei1058.bedwars:bedwars-plugin:23.7-SNAPSHOT")
     compileOnly("com.andrei1058.bedwars:bedwars-api:23.7-SNAPSHOT")
 
-//    compileOnly("com.andrei1058.bedwars:bedwars-api:22.3.4")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
 
     implementation("com.github.tofpu:dynamic-message:1.0.6")
@@ -37,7 +33,6 @@ dependencies {
 
     implementation("net.kyori:adventure-api:4.14.0")
     implementation("net.kyori:adventure-platform-bukkit:4.3.1")
-//    implementation("net.kyori:adventure-text-minimessage:4.10.1")
     implementation("net.kyori:adventure-text-minimessage:4.14.0")
     implementation("com.github.Revxrsal.Lamp:common:3.0.4")
     implementation("com.github.Revxrsal.Lamp:bukkit:3.0.4")
@@ -51,10 +46,12 @@ dependencies {
     testImplementation("com.github.mockbukkit:MockBukkit:v1.16-SNAPSHOT")
     testImplementation("org.mockito:mockito-core:3.+")
 
-//    testImplementation("com.github.andrei1058.BedWars1058:BedWars1058:23.3")
     testImplementation("com.andrei1058.bedwars:bedwars-api:23.7-SNAPSHOT")
+    testImplementation("com.andrei1058.bedwars:bedwars-plugin:23.7-SNAPSHOT")
 
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.6.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
 }
 
 //sourceSets {
