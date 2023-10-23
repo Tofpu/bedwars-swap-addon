@@ -1,9 +1,11 @@
 package io.tofpu.bedwarsswapaddon.model.swap.pool.task;
 
-import io.tofpu.bedwarsswapaddon.wrapper.snapshot.Snapshot;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 // todo: 1 broken test; and it's not as simple as this; will need to recursively loop it or smth
 public class SwappageAlgorithm {
