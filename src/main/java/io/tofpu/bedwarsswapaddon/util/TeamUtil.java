@@ -29,12 +29,10 @@ public class TeamUtil {
     @NotNull
     private static String legacyToMiniMessage(String message) {
         // legacy -> component -> serialized mini-message
-        System.out.println("message=" + message);
         Component component = ColorUtil.legacyToComponent(message);
-        System.out.println("component=" + component);
-        // replaces `\<` with `<`; because for whatever reason it's being inserted before each color tag (i.e: \<yellow>)
+        // replaces `\<` with `<`
+        // because for whatever reason it's being inserted before each color tag (i.e: \<yellow>)
         message = ColorUtil.serializeMiniMessage(component).replace("\\<", "<");
-        System.out.println("back to message=" + message);
         return message;
     }
 

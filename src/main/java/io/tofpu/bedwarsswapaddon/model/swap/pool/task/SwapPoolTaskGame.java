@@ -73,8 +73,6 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
 
             TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
                     "%team%", currentTeamName), nextSnapshot);
-//            TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
-//                    "%team%", TeamUtil.teamOf(target.getColor())), currentTeam);
 
             context.getArenaTracker().swapTeams(currentTeamSnapshot, nextSnapshot.getLive());
 
