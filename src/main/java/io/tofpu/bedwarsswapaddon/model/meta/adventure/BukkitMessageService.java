@@ -14,7 +14,7 @@ public class BukkitMessageService implements MessageService {
 
     @Override
     public void sendMessage(CommandSender sender, String message) {
-        bukkitAudiences.sender(sender).sendMessage(ColorUtil.translate(message));
+        bukkitAudiences.sender(sender).sendMessage(ColorUtil.deserializeMiniMessage(message));
     }
 
     @Override

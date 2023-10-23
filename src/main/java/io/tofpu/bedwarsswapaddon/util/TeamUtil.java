@@ -1,22 +1,19 @@
 package io.tofpu.bedwarsswapaddon.util;
 
-import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.cryptomorin.xseries.messages.Titles;
 import io.tofpu.bedwarsswapaddon.model.meta.adventure.MessageServiceHolder;
 import io.tofpu.bedwarsswapaddon.model.meta.log.LogHandler;
 import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
-import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class TeamUtil {
-    public static void broadcastMessageTo(final String message, final TeamSnapshot... teams) {
+    public static void broadcastMessageTo(String message, final TeamSnapshot... teams) {
+        message = legacyToMiniMessage(message);
+
         for (final TeamSnapshot team : teams) {
             for (final Player player : team.getMemberPlayers()) {
                 try {
@@ -29,7 +26,21 @@ public class TeamUtil {
         }
     }
 
-    public static void broadcastTitleTo(final String message, final TeamSnapshot... teams) {
+    @NotNull
+    private static String legacyToMiniMessage(String message) {
+        // legacy -> component -> serialized mini-message
+        System.out.println("message=" + message);
+        Component component = ColorUtil.legacyToComponent(message);
+        System.out.println("component=" + component);
+        // replaces `\<` with `<`; because for whatever reason it's being inserted before each color tag (i.e: \<yellow>)
+        message = ColorUtil.serializeMiniMessage(component).replace("\\<", "<");
+        System.out.println("back to message=" + message);
+        return message;
+    }
+
+    public static void broadcastTitleTo(String message, final TeamSnapshot... teams) {
+        message = legacyToMiniMessage(message);
+
         final String[] split = getSplit(message);
         final String title = split.length > 0 ? split[0] : message;
         final String subtitle = split.length > 1 ? split[1] : "";
@@ -50,25 +61,13 @@ public class TeamUtil {
     }
 
     @NotNull
-    private static String[] getSplit(final String message) {
+    private static String[] getSplit(String message) {
         try {
-            return BukkitComponentSerializer.legacy()
-                    .serialize(ColorUtil.translate(message))
-                    .split("\n");
+            Component component = ColorUtil.deserializeMiniMessage(message);
+            message = ColorUtil.serializeToLegacy(component);
+            return message.split("\n");
         } catch (NoClassDefFoundError ignored) {
             return message.split("\n");
-        }
-    }
-
-    public static String teamOf(final TeamColor color) {
-        try {
-            final TextComponent component = (TextComponent) ColorUtil.translateLegacy(
-                    "§" + color.chat().getChar() + color.name()
-            ).applyFallbackStyle(TextDecoration.ITALIC.withState(false));
-
-            return MiniMessage.miniMessage().serialize(component);
-        } catch (ExceptionInInitializerError | NoClassDefFoundError exception) {
-            return color.chat().getChar() + color.name();
         }
     }
 

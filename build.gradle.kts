@@ -35,10 +35,10 @@ dependencies {
     implementation("com.github.tofpu:dynamic-message:1.0.6")
     implementation("com.github.Tofpu:message-presenter:1.0.0")
 
-    implementation("net.kyori:adventure-api:4.10.1")
-    implementation("net.kyori:adventure-platform-bukkit:4.1.0")
-    implementation("net.kyori:adventure-text-minimessage:4.10.1")
-    implementation("net.kyori:adventure-text-minimessage:4.10.1")
+    implementation("net.kyori:adventure-api:4.14.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.1")
+//    implementation("net.kyori:adventure-text-minimessage:4.10.1")
+    implementation("net.kyori:adventure-text-minimessage:4.14.0")
     implementation("com.github.Revxrsal.Lamp:common:3.0.4")
     implementation("com.github.Revxrsal.Lamp:bukkit:3.0.4")
 
