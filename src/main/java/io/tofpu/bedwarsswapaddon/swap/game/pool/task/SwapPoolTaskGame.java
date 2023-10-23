@@ -2,6 +2,7 @@ package io.tofpu.bedwarsswapaddon.swap.game.pool.task;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.sidebar.SidebarService;
 import io.tofpu.bedwarsswapaddon.LogHandler;
 import io.tofpu.bedwarsswapaddon.MessageHolder;
@@ -11,6 +12,7 @@ import io.tofpu.bedwarsswapaddon.util.TeamUtil;
 import org.bukkit.entity.Player;
 
 import java.util.AbstractMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -71,9 +73,16 @@ public class SwapPoolTaskGame extends SwapPoolTaskBase {
             TeamUtil.broadcastTitleTo(messageHolder.swapTitleAnnouncement.replace(
                     "%team%", currentTeamName), swapTarget);
 
+            // this is done to ensure that the traps are not triggered upon the player's teleportation to their new team
+            LinkedList<EnemyBaseEnterTrap> activeTraps = swapTarget.getLive().getActiveTraps();
+            LinkedList<EnemyBaseEnterTrap> copyOfTargetActiveTraps = new LinkedList<>(activeTraps);
+            activeTraps.clear();
+
             // applies the snapshot belonging to the team they are swapping to
             context.getArenaTracker().swapTeams(currentSnapshot, swapTarget.getLive());
             currentWrapper.use(swapTarget);
+
+            activeTraps.addAll(copyOfTargetActiveTraps);
         }
 
         SidebarService instance = SidebarService.getInstance();
