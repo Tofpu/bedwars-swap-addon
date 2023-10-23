@@ -1,9 +1,9 @@
 package io.tofpu.bedwarsswapaddon.util;
 
-import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class ColorUtil {
     public static Component deserializeMiniMessage(final String message) {
@@ -15,10 +15,14 @@ public class ColorUtil {
     }
 
     public static String serializeToLegacy(final Component component) {
-        return BukkitComponentSerializer.legacy().serialize(component);
+        return LegacyComponentSerializer.legacySection().serialize(component);
     }
 
     public static TextComponent legacyToComponent(final String message) {
-        return BukkitComponentSerializer.legacy().deserialize(message);
+        return LegacyComponentSerializer.legacySection().deserialize(message);
+    }
+
+    public static String miniMessageToLegacy(String message) {
+        return LegacyComponentSerializer.legacySection().serialize(MiniMessage.miniMessage().deserialize(message));
     }
 }
