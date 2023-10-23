@@ -1,7 +1,7 @@
 package io.tofpu.bedwarsswapaddon.util;
 
-import io.tofpu.bedwarsswapaddon.model.meta.adventure.MessageServiceHolder;
-import io.tofpu.bedwarsswapaddon.wrapper.snapshot.TeamSnapshot;
+import io.tofpu.bedwarsswapaddon.message.MessageServiceHolder;
+import io.tofpu.bedwarsswapaddon.swap.snapshot.team.TeamSnapshot;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

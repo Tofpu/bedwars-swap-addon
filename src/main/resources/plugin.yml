@@ -1,5 +1,5 @@
 name: BedwarsSwapAddon
-main: io.tofpu.bedwarsswapaddon.plugin.BedwarsSwapAddonPlugin
+main: io.tofpu.bedwarsswapaddon.BedwarsSwapAddonPlugin
 version: ${version}
 depend:
   - BedWars1058
